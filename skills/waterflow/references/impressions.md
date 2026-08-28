@@ -14,8 +14,9 @@ subagent is "the live records tagged `checkout`", not a pasted conversation.
 ## Where records live
 
 One file per record, at `.waterflow/impressions/<id>.md`, committed alongside the
-code. The path is set at setup and read from `.waterflow/config.md`; everything
-else here is fixed.
+code. Create the directory on the first write; nothing sets it up in advance. The
+path is the convention, overridden only if `.waterflow/config.md` exists and says
+otherwise; everything else here is fixed.
 
 Records are plain files and retrieval is `grep`. No index, no database, no
 embeddings — the store has to survive being copied into any repository on any

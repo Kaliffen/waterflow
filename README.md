@@ -62,10 +62,11 @@ is surfaced as stale rather than quietly believed.
 **Composites**, user-invoked, thin declarations of atom sequences: `align`,
 `shape`, `build`, `land`.
 
-**Also:** `setup-waterflow` binds Waterflow to a repository and offers a
-deterministic pre-commit proof gate. `authoring` is the standard every skill
-here is written against. `.claude-plugin/` and `.codex-plugin/` are the host
-manifests.
+**Also:** `authoring` is the standard every skill here is written against,
+`proof-gate.sh` is the optional deterministic pre-commit hook, and
+`.claude-plugin/plugin.json` is the host manifest.
+
+There is no setup step. The paths below are conventions, not configuration.
 
 Skills arrive as one plugin: they share contracts, so they travel together. The
 permanent context cost is eleven model-invoked descriptions, and that is the
@@ -73,80 +74,43 @@ budget, enforced by `scripts/check.mjs`.
 
 ## How to use
 
-### 0. Spawn a new .NET solution, already bound
+### 1. Load it
 
-One command produces a git repository with a solution, a library, an xunit test
-project, the Waterflow config, the impression store, the proof gate installed as
-a pre-commit hook, and a `CLAUDE.md` pointing at the router — committed, with
-nothing left to answer:
+Waterflow is one Claude Code plugin, loaded from a checkout on disk. In the
+repository you want to route work in — a new solution or an old one:
 
 ```sh
-sh path/to/waterflow/skills/setup-waterflow/new-dotnet-repo.sh Checkout
-```
-
-It takes an optional second argument for the parent directory, and needs
-`dotnet` and `git`. The default proof is recorded as `dotnet test`.
-
-```
-Checkout/
-  Checkout.slnx
-  src/Checkout/                  library
-  tests/Checkout.Tests/          xunit, referencing the library
-  .waterflow/config.md           state surface, store, authority label, proof
-  .waterflow/items/              work items
-  .waterflow/impressions/        what the flow learns
-  .git/hooks/pre-commit          the proof gate
-  CLAUDE.md                      points at the router
-  wf.sh, wf.cmd                  start Claude with this checkout loaded
-```
-
-Waterflow is not copied into the new repository. The launchers hold an absolute
-path to the checkout you ran the script from, so an edit to a skill here is live
-in the new solution on the next session:
-
-```sh
-cd Checkout
-./wf.sh
-```
-
-They are gitignored, since the path is true on one machine only. For any other
-stack, or an existing repository, use the two steps below instead.
-
-### 1. Load it into an existing repository
-
-Waterflow is one Claude Code plugin, loaded from a checkout on disk:
-
-```sh
+dotnet new sln -n Checkout          # or whatever your stack makes
+git init
 claude --plugin-dir /path/to/waterflow
 ```
 
 The flag is per-session and reads the working tree directly — nothing is copied
-or pinned, so the skills are whatever the checkout currently says. Worth an alias
-or a two-line launcher in any repository you route work in regularly.
+or pinned, so the skills are whatever the checkout currently says. That is what
+makes it the right way to work *on* Waterflow: edit a skill, restart, done.
+Worth an alias in any repository you use regularly.
 
-Codex reads `.codex-plugin/plugin.json` from the same checkout.
+Waterflow needs a git repository: `revision` is the freshness anchor on every
+record.
 
-### 2. Bind it to the repository
+### 2. Conventions, not configuration
 
-Once per repository, before routing anything:
+Nothing to bind. The skills assume these, and create what they need on first
+write:
 
-```
-/setup-waterflow
-```
-
-It reads the repo first, then asks one question at a time about the four things
-it cannot guess:
-
-| It resolves | Default |
+| | |
 |---|---|
-| **State surface** — where work items live | local markdown, `.waterflow/items/` |
-| **Impressions path** — where records are written | `.waterflow/impressions/`, committed |
-| **Authority label** — what your team calls the deciding role | "the owner" |
-| **Proof gate** — the pre-commit hook | offered, never installed silently |
+| `.waterflow/items/` | work items, local markdown |
+| `.waterflow/impressions/` | records, committed beside the code |
+| "the owner" | what the prose calls whoever decides |
+| the repo's own test command | the default proof |
 
-It writes `.waterflow/config.md` and adds a Waterflow block to your `CLAUDE.md`
-or `AGENTS.md`. Waterflow needs a git repository: `revision` is the freshness
-anchor on every record.
+Override any of them by writing `.waterflow/config.md` yourself — a repository
+that already tracks work in Jira or GitHub Issues says so there. Most do not
+need the file, and the skills read the conventions when it is absent.
+
+Waterflow does need a git repository: `revision` is the freshness anchor on
+every record.
 
 ### 3. Route a piece of work
 
@@ -221,9 +185,14 @@ for the subject instead of the conversation.
 
 ### 7. The proof gate
 
-If you accepted it at setup, `.git/hooks/pre-commit` refuses a commit whose
-staged files are covered by a live `fail` record, and warns when a commit makes
-a recorded `pass` stale. It reads the store directly and asks no model anything.
+Optional, and one copy away. It refuses a commit whose staged files are covered
+by a live `fail` record, and warns when a commit makes a recorded `pass` stale.
+It reads the store directly and asks no model anything.
+
+```sh
+cp /path/to/waterflow/skills/waterflow/proof-gate.sh .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
+```
 
 ```sh
 WATERFLOW_GATE=warn git commit      # downgrade a refusal to a warning
@@ -233,7 +202,6 @@ WATERFLOW_IMPRESSIONS=path/to/store # if impressions are not at the default
 ### A day in it
 
 ```
-/setup-waterflow                    once per repo
 /waterflow <the work>               get the five dials
 /align <subject>                    if the terms or facts are not settled
 /shape <subject>                    cut it into slices with blocking edges
@@ -289,13 +257,5 @@ control characters. `scripts/test-proof-gate.sh` drives the pre-commit gate
 against a throwaway repository. CI runs both on every push, on Linux — which is
 where a gate authored on Windows fails, since msys grep hides a trailing CR and
 Windows reports every file as executable.
-
-## Distribution
-
-`--plugin-dir` is the way Waterflow is used. `.claude-plugin/marketplace.json`
-exists so it *can* be published as an installable plugin
-(`/plugin marketplace add Kaliffen/waterflow`), but that path copies a snapshot
-of the checkout into the plugin cache, pinned to a commit, which is wrong for
-anyone working on the skills themselves. Nothing in the flow above uses it.
 
 MIT.

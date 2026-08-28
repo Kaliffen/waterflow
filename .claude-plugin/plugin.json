@@ -21,7 +21,6 @@
   "skills": [
     "./skills/waterflow",
     "./skills/authoring",
-    "./skills/setup-waterflow",
     "./skills/recall",
     "./skills/interrogate",
     "./skills/define",

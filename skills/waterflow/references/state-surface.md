@@ -4,8 +4,9 @@ Where **work items** live. Skills call the four operations below and never touch
 a path, a URL, or a file format — that is what lets Waterflow install into a
 repository that already has a process instead of demanding a new one.
 
-The binding is resolved once, by `setup-waterflow`, and recorded in
-`.waterflow/config.md`.
+The default binding is local markdown in `.waterflow/items/`, assumed without
+configuration. A repository that tracks work elsewhere records the mapping in
+`.waterflow/config.md`; when the file is absent, the default holds.
 
 ## Not the impression store
 
@@ -113,8 +114,8 @@ the proof state and revision in the closing comment. Uses `gh`.
 ## Mapping onto an existing process
 
 The common case is a repository that already tracks work. Do not replace it.
-`setup-waterflow` maps the four operations onto what is there and writes the
-mapping into config — the file that holds the backlog, the field that carries
+Map the four operations onto what is there and write the mapping into
+`.waterflow/config.md` — the file that holds the backlog, the field that carries
 blocking, the convention for done.
 
 Two things have to be resolved for the mapping to hold:

@@ -63,5 +63,5 @@ Load one when its dial is in play, not before.
 
 Atoms, all model-invoked: `recall`, `interrogate`, `define`, `seam`, `slice`,
 `probe`, `dig`, `test`, `prove`, `critique`. Composites, all typed by hand:
-`/align`, `/shape`, `/build`, `/land`. Run `/setup-waterflow` once per
-repository before any of it.
+`/align`, `/shape`, `/build`, `/land`. There is no setup step: the paths are
+conventions, overridable by a hand-written `.waterflow/config.md`.

@@ -17,7 +17,6 @@ import { fileURLToPath } from "node:url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SKILLS_DIR = join(ROOT, "skills");
 const MANIFEST = join(ROOT, ".claude-plugin", "plugin.json");
-const CODEX_MANIFEST = join(ROOT, ".codex-plugin", "plugin.json");
 const DESCRIPTION_BUDGET = 11;
 
 const KNOWN_FRONTMATTER_KEYS = new Set([
@@ -173,24 +172,6 @@ if (!existsSync(MANIFEST)) {
         if (!skillNames.includes(name)) fail(`manifest: lists ${name}, which is not on disk`);
       }
     }
-  }
-}
-
-// --- 7. manifest version agreement -------------------------------------------
-// The two manifests are published together; a version that moves in one and not
-// the other ships a plugin whose hosts disagree about what it is.
-if (existsSync(MANIFEST) && existsSync(CODEX_MANIFEST)) {
-  try {
-    const claude = JSON.parse(readFileSync(MANIFEST, "utf8"));
-    const codex = JSON.parse(readFileSync(CODEX_MANIFEST, "utf8"));
-    if (claude.version !== codex.version) {
-      fail(
-        `manifest: version drift — .claude-plugin says ${claude.version}, ` +
-          `.codex-plugin says ${codex.version}`,
-      );
-    }
-  } catch {
-    // JSON errors are already reported by the manifest check above.
   }
 }
 

@@ -31,17 +31,26 @@ end-to-end review.
 - `authoring` no longer points at `AGENTS.md`, `ATTRIBUTION.md`, or
   `scripts/check.mjs`. It ships to consumers, and those are factory surfaces.
 - Added CI and a fixture suite for the proof gate.
-- Added `skills/setup-waterflow/new-dotnet-repo.sh`: one command that spawns a
-  .NET solution with Waterflow already bound — solution, library, xunit project,
-  git repository, config, impression store, proof gate installed and executable,
-  and `CLAUDE.md`, committed. A skill-owned asset rather than a `scripts/` entry,
-  because consumers need it.
-- The spawned repository loads Waterflow with `claude --plugin-dir`, via
-  gitignored `wf.sh`/`wf.cmd` launchers holding the checkout's absolute path.
-  Installing through the marketplace copies the checkout into the plugin cache
-  pinned to a commit, so edits to a skill are invisible until a reinstall — the
-  opposite of what someone developing the skills needs. `--plugin-dir` reads the
-  working tree. The marketplace manifest stays, demoted to a Distribution note.
+- Waterflow is loaded with `claude --plugin-dir <checkout>`, and that is now the
+  only documented way in. Installing through the marketplace copies the checkout
+  into the plugin cache pinned to a commit, so an edit to a skill stays invisible
+  until a reinstall — the opposite of what developing the skills needs.
+  `--plugin-dir` reads the working tree. The marketplace manifest stays, demoted
+  out of the flow into a Distribution note.
+- Removed the `setup-waterflow` skill. Four of the five things it resolved were
+  its own defaults being read back to you; the fifth, the test command, is
+  detectable. The paths are conventions now, created on first write, and a
+  hand-written `.waterflow/config.md` still overrides them for a repository that
+  tracks work elsewhere. `proof-gate.sh` moved to `skills/waterflow/` and is
+  installed with one `cp`, which is the only part that ever needed consent.
+- A `new-dotnet-repo.sh` scaffold was added and removed again in the same cycle.
+  It wrote the config, installed the gate and wrote the `CLAUDE.md` block: a
+  second implementation of what `setup-waterflow` did, against principle 4. Then
+  `setup-waterflow` went too. `dotnet new sln` plus `--plugin-dir` is the whole
+  story, and neither half is Waterflow's to own.
+- Deleted `.claude-plugin/marketplace.json` and `.codex-plugin/`. `--plugin-dir`
+  needs only `.claude-plugin/plugin.json` — verified: with the manifest a skill
+  resolves, without it none do — and the marketplace path is gone entirely.
 - `.waterflow/config.md` gained a `default proof` row, and `setup-waterflow` now
   detects the project's test command. The Proof dial had no answer until it was
   asked for one, which is backwards: `proof.md` requires it be named at routing

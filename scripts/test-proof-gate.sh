@@ -1,5 +1,5 @@
 #!/bin/sh
-# Fixture suite for skills/setup-waterflow/proof-gate.sh.
+# Fixture suite for skills/waterflow/proof-gate.sh.
 #
 # Runs the gate against a throwaway repository, one case per behaviour it is
 # supposed to have. Every case here was a real defect or the control that proves
@@ -7,7 +7,7 @@
 #
 #   ./scripts/test-proof-gate.sh
 
-GATE=$(cd "$(dirname "$0")/.." && pwd)/skills/setup-waterflow/proof-gate.sh
+GATE=$(cd "$(dirname "$0")/.." && pwd)/skills/waterflow/proof-gate.sh
 [ -f "$GATE" ] || { echo "no gate at $GATE" >&2; exit 1; }
 
 WORK=$(mktemp -d)

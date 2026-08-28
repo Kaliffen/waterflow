@@ -55,6 +55,6 @@ See [impressions.md](impressions.md).
 
 ## The label
 
-Shipped prose says **the owner**, or plain second person. `setup-waterflow`
-offers an optional label so a team can render that as whatever they call the
-role. The label is cosmetic; the rule above is not.
+Shipped prose says **the owner**, or plain second person. A team that calls the
+role something else can say so in `.waterflow/config.md`. The label is cosmetic;
+the rule above is not.
