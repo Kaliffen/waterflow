@@ -33,9 +33,9 @@ an entire exploration loop.
 
 3. **Exclude superseded.** Collect every id named in a `supersedes:` line and
    drop those records. Include them only when the question is how something
-   changed, not what is true. The `history` directory beside the store holds the
-   watermarks of consolidated subjects, and is read for that question and no
-   other — never to answer what is true now, which is what moving them out of
+   changed, not what is true. The `history` directory beside the store holds
+   what consolidation cleared out — watermarks, and records something else
+   replaced — and is read for that question and no other — never to answer what is true now, which is what moving them out of
    the store was for.
 
    ```sh
@@ -108,8 +108,9 @@ an entire exploration loop.
    **Say the shape before the contents** — "4 known, 2 believed, 3 idioms, 1
    goal unmeasured" tells the reader where to look before they read anything.
 
-   **A goal with no `observation` naming it is reported unmeasured**, never as
-   met and never silently.
+   **A goal with nothing measuring it is reported unmeasured**, never as met and
+   never silently. A fact naming it counts, not only an observation: a reading
+   checked against the target is better evidence than one that was not.
 
    **A record carrying `conditions` shows them beside its gist**, never folded
    into the detail. A measurement whose conditions are one click away is read as

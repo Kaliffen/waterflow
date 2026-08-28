@@ -28,7 +28,7 @@ Records are plain files and retrieval is `grep`. No index, no database, no
 embeddings — the store has to survive being copied into any repository on any
 host.
 
-**Spent watermarks live beside the store, not in it**, in a `history` directory
+**What is spent lives beside the store, not in it**, in a `history` directory
 that is the impressions directory's sibling — `.waterflow/history` by default,
 and `docs/history` for a store relocated to `docs/store`. Nothing reads it, and
 the only thing that writes it is the fold.
@@ -191,14 +191,19 @@ What happens is three things:
    definition rather than by classification.
 
    ```sh
-   grep -rh '^supersedes:' "$store" | tr -d '[]' | sed 's/supersedes://' |
-     tr ',' '
-' | tr -d ' ' | grep .
+   grep -rh '^supersedes:' "$store" | tr -d '' | sed 's/^supersedes: *//' |
+     tr -d '[]' | tr ',' ' ' | tr ' ' '
+' | grep . |
+     while read -r id; do
+       [ -f "$store/$id.md" ] && git mv "$store/$id.md" "$history"/
+     done
    ```
 
-   Each id in that output is a file that moves. The trail stays readable: the
-   record that superseded it names it, and `history` is where the reader is sent
-   for the question of how something changed.
+   Same pipeline the proof gate uses to find superseded ids, including the
+   `tr -d ''` — a record written on Windows carries a carriage return that
+   silently breaks the match otherwise. The trail stays readable: the record
+   that superseded it names it, and `history` is where a reader is sent for the
+   question of how something changed.
 
 3. **Everything else stays, and has its `kind` settled.** Facts, observations,
    idioms and goals are what the work established, and they are the subject's
@@ -213,6 +218,11 @@ What happens is three things:
    force the inference on someone. Settling it once, at the moment the subject
    is finished and nothing more will be added, is the only point where it can be
    done without guessing at work still in flight.
+
+   A record with no `atom` is a `goal`, which is the only kind nothing emits,
+   so it already carries its `kind` and there is nothing to settle. As in step
+   1, an atom that is not in the table means leave the record alone rather than
+   guess.
 
    The records the landed work itself emitted are re-anchored, but by the
    integration rule under **Staleness**, which is a separate step that runs
