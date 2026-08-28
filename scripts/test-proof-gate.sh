@@ -27,6 +27,24 @@ REV=$(git rev-parse --short HEAD)
 pass=0
 fail=0
 
+record_kind() { # kind state scope revision
+  printf -- '---
+id:         2026-08-28-aaaa
+kind:       %s
+atom:       prove
+subject:    checkout
+lane:       build
+tier:       good
+state:      %s
+revision:   %s
+scope:      [%s]
+supersedes: []
+tags:       [prove, checkout]
+---
+Record.
+'     "$1" "$2" "$4" "$3" > .waterflow/impressions/r.md
+}
+
 record() { # state scope revision
   printf -- '---\nid:         2026-08-28-aaaa\natom:       prove\nsubject:    checkout\nlane:       build\ntier:       good\nstate:      %s\nrevision:   %s\nscope:      [%s]\nsupersedes: []\ntags:       [prove, checkout]\n---\nRecord.\n' \
     "$1" "$3" "$2" > .waterflow/impressions/r.md
@@ -103,6 +121,23 @@ printf '# Waterflow config\n\n| Setting | Value |\n|---|---|\n| impressions path
 check "relocated store is found via config.md" 1 "Commit refused"
 rm -f .waterflow/config.md
 mv docs/store/r.md .waterflow/impressions/r.md
+
+# A record that asserts no verdict never gates. An observation is a reading, not
+# a result: it can carry a failing number and still not be a failing proof.
+record_kind observation fail "packages/" "$REV"
+check "an observation never gates, even carrying a verdict" 0 -
+
+record_kind goal fail "packages/" "$REV"
+check "a goal never gates" 0 -
+
+# The control: without the kind, the same record still refuses. This is what
+# proves the two cases above are not silencing the check.
+record fail "packages/" "$REV"
+check "a record with no kind is still gated" 1 "Commit refused"
+
+# A fact is the kind that carries a verdict, and it gates exactly as before.
+record_kind fact fail "packages/" "$REV"
+check "a fact gates" 1 "Commit refused"
 
 # No store at all is not an error.
 rm -rf .waterflow

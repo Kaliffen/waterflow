@@ -27,6 +27,7 @@ host.
 ```
 ---
 id:         2026-08-28-a4f2
+kind:       fact
 atom:       seam
 subject:    checkout
 lane:       build
@@ -46,6 +47,7 @@ because it couples every test to the wire format.
 | Field | Required | Meaning |
 |---|---|---|
 | `id` | always | `YYYY-MM-DD-<4 hex>`. Matches the filename. Never reused. |
+| `kind` | always | What sort of knowledge this is. See the kinds below. |
 | `atom` | always | The atom that emitted. One of the shipped atom names. |
 | `subject` | always | One kebab-case noun the record is about. |
 | `lane` | always | The lane in force. See [lanes.md](lanes.md). |
@@ -60,6 +62,39 @@ because it couples every test to the wire format.
 The body is a **gist line** — one sentence, the finding itself — then detail
 below it. Retrieval shows gists; detail is read only when a gist looks relevant.
 Write the gist so it is useful alone.
+
+## The kinds
+
+Five, and the reason they exist is that a trace and a truth come back from a
+query looking identical, so the older one wins by sounding certain.
+
+| Kind | Is | Displaced by |
+|---|---|---|
+| `fact` | Known: we made it, checked it, or proved it. | code moving under its `scope`, or a later fact |
+| `observation` | Seen in a signal and believed. Not verified. | being promoted to a fact, or contradicted |
+| `idiom` | A philosophy that drives decisions here. | a human revisiting it |
+| `goal` | A measurable target that gates a decision. | being restated, never by being met |
+| `watermark` | What a process did. Links the others. | its process ending — see the fold below |
+
+**Fact or observation is decided by one question, not by judgement:** did
+something run that could have failed? If nothing did, it is an observation. That
+is the same rule `proof.md` already applies to proofs, so nobody has to
+deliberate, and it splits `prove` cleanly — a verdict is a fact, a measurement
+is a reading.
+
+**An observation is a debt.** It is believed on a single sighting and it is
+promoted by running something that could have failed. A subject's observations
+are the list of what it would have to prove to be sure of itself, which is a
+list the store has never been able to produce.
+
+**A goal never closes.** It is met or unmet, and it names the measurement that
+decides it — which statistic, under what conditions. A target with no
+observation against it is *unmeasured*, and is reported that way rather than as
+met. Work that finishes is an item on the state surface; a goal is not work.
+
+Only a `fact` carries a verdict, so only a `fact` can gate a commit. A record
+written before this field existed carries no `kind` and is still gated, which is
+what keeps every store that predates this readable.
 
 ## The tag rule
 

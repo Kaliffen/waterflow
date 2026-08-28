@@ -64,6 +64,15 @@ for f in "$DIR"/*.md; do
     continue
   fi
 
+  # Only a fact carries a verdict. An observation is a reading, a goal is a
+  # target, and neither is a result the gate can act on -- so a record that
+  # names any other kind is skipped whatever state it happens to carry. A
+  # record with no kind at all predates the field and is still gated.
+  case $(field kind "$f") in
+    "" | fact) ;;
+    *) continue ;;
+  esac
+
   state=$(field state "$f")
   subject=$(field subject "$f")
   revision=$(field revision "$f")
