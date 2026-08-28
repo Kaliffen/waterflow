@@ -1,6 +1,10 @@
-﻿# Local scratch
+# Local scratch
 .tmp/
 tmp/
+
+# Pinned reference checkouts. Upstream repos and commits are recorded in
+# ATTRIBUTION.md; the working copies stay local.
+.review/
 
 # Tool caches
 .pytest_cache/

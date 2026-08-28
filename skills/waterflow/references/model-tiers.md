@@ -1,37 +1,39 @@
-﻿# Model Tiers
+# Model tiers
 
-Use stable tier names as the workflow contract. Concrete model names are current preferences and may change.
+Tier names are the durable contract. Model names are current examples and will
+change, so route by tier and let the mapping drift.
 
-## Tiers
+The tier dial is **advisory**: Waterflow reports the tier a phase warrants and
+you choose the model. It does not dispatch.
 
-### Best
+| Tier | Use for | Current example |
+|---|---|---|
+| `best` | Strategy, architecture, contested scope, hard-to-reverse decisions. | Opus |
+| `good` | Review, coding judgement, bounded implementation with real risk. | Sonnet |
+| `normal` | Ordinary implementation with clear acceptance criteria and local blast radius. | The host's default coding model |
+| `low` | Bookkeeping, status, formatting, deterministic chores. | Haiku |
 
-Use for strategic planning, architecture, workflow design, contested scope, and hard-to-reverse decisions.
+## Why this is a dial at all
 
-Current preferred example: Opus.
+Model strength is usually chosen once per session and then forgotten, which means
+the whole session runs at whatever the hardest phase needed — or, more often, at
+whatever the easiest one did. Neither is right. A single piece of work crosses
+tiers: settling the architecture is `best`, applying the resulting rename is
+`low`.
 
-### Good
+The unit of tiering is the **phase**, not the session or the task.
 
-Use for review, coding judgment, bug fixing, and bounded implementation where quality matters.
+## Moving between tiers
 
-Current preferred example: Sonnet.
+The escalate and downgrade rules are the ones that govern Lane and Owner too —
+see [dials.md](dials.md). Tier moves with them, because the conditions that call
+for more process are the conditions that call for more model.
 
-### Normal
+Two tier-specific notes:
 
-Use for ordinary implementation with clear acceptance criteria, known seams, and local blast radius.
-
-Current preferred example: the default coding model for the active host, or Sonnet when risk rises.
-
-### Low
-
-Use for bookkeeping, status updates, formatting, inventory, simple artifact maintenance, and deterministic chores.
-
-Current preferred example: Haiku.
-
-## Escalation
-
-Escalate when product direction, architecture, domain modeling, unclear test seams, conflicting evidence, or costly rework is involved.
-
-## Downgrade
-
-Downgrade when the decision is already made, the change is mechanical, and the output is easy to verify.
+- **Escalating mid-work is legitimate.** Hitting a decision that needs `best`
+  while running at `normal` is a routing correction, not a failure. Say so, and
+  say what the decision is.
+- **Downgrading needs the decision written down first.** Dropping to `low` for a
+  mechanical change is safe only when the thing that made it mechanical exists as
+  a record. Otherwise the cheap model is re-deriving the expensive answer.

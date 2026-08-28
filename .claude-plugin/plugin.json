@@ -1,0 +1,40 @@
+{
+  "name": "waterflow",
+  "version": "0.2.0",
+  "description": "Atomic, composable agent skills that carry work from idea to integration in a small feedback loop, routing process, model tier, agent topology, and proof by risk.",
+  "author": {
+    "name": "Adam Boes",
+    "url": "https://github.com/Kaliffen"
+  },
+  "homepage": "https://github.com/Kaliffen/waterflow",
+  "repository": "https://github.com/Kaliffen/waterflow",
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "skills",
+    "agents",
+    "planning",
+    "review",
+    "tdd",
+    "context-engineering"
+  ],
+  "skills": [
+    "./skills/waterflow",
+    "./skills/authoring",
+    "./skills/setup-waterflow",
+    "./skills/recall",
+    "./skills/interrogate",
+    "./skills/define",
+    "./skills/seam",
+    "./skills/slice",
+    "./skills/probe",
+    "./skills/dig",
+    "./skills/test",
+    "./skills/prove",
+    "./skills/critique",
+    "./skills/align",
+    "./skills/shape",
+    "./skills/build",
+    "./skills/land"
+  ]
+}
