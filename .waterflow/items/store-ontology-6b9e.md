@@ -3,7 +3,9 @@ id:       store-ontology-6b9e
 title:    Consolidation clears what is spent and settles what survives
 subject:  store-ontology
 blockers: []
-state:    open
+state:    closed
+proof:    pass
+revision: da8565c
 ---
 Finishing a subject leaves a store whose every live record says what kind of
 knowledge it is, and whose retrieval directory holds nothing that something else

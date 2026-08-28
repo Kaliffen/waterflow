@@ -99,8 +99,13 @@ query looking identical, so the older one wins by sounding certain.
 **Fact or observation is decided by one question, not by judgement:** did
 something run that could have failed? If nothing did, it is an observation. That
 is the same rule `proof.md` already applies to proofs, so nobody has to
-deliberate, and it splits `prove` cleanly — a verdict is a fact, a measurement
-is a reading.
+deliberate.
+
+A number does not settle it, and this is the trap. A timing compared against a
+named budget *could* have failed, so it is a verdict and a fact, `conditions`
+and all. A timing with nothing to fail against is a reading, and an
+observation. The presence of a measurement says nothing; the presence of
+something that could have refused it says everything.
 
 **An observation is a debt.** It is believed on a single sighting, and it is
 promoted by running something that could have failed.
@@ -115,7 +120,7 @@ Which atom writes which kind, so no atom has to decide twice:
 | Atom | Kind |
 |---|---|
 | `seam`, `test`, `prove` with a verdict | `fact` |
-| `critique`, `dig`, `probe`, `prove` with a measurement | `observation` |
+| `critique`, `dig`, `probe`, `prove` with no verdict | `observation` |
 | `define`, `interrogate` | `idiom` |
 | `slice` | `watermark` |
 
