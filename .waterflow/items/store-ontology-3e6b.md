@@ -3,7 +3,9 @@ id:       store-ontology-3e6b
 title:    Querying a subject answers what is known, believed and wanted
 subject:  store-ontology
 blockers: [store-ontology-1c4f]
-state:    open
+state:    closed
+proof:    pass
+revision: d9ec671
 ---
 A query returns what is true and what governs the area, and separates the things
 believed on a single sighting from the things that were checked. It can be asked

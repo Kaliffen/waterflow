@@ -3,7 +3,9 @@ id:       store-ontology-2d5a
 title:    Spent watermarks are somewhere nothing looks
 subject:  store-ontology
 blockers: [store-ontology-1c4f]
-state:    open
+state:    closed
+proof:    pass
+revision: d9ec671
 ---
 A watermark whose process is over moves out of the retrieval directory into a
 history directory beside it. Reading the store returns only what is currently
