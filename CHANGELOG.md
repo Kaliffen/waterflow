@@ -31,6 +31,24 @@ end-to-end review.
 - `authoring` no longer points at `AGENTS.md`, `ATTRIBUTION.md`, or
   `scripts/check.mjs`. It ships to consumers, and those are factory surfaces.
 - Added CI and a fixture suite for the proof gate.
+- Added `skills/setup-waterflow/new-dotnet-repo.sh`: one command that spawns a
+  .NET solution with Waterflow already bound — solution, library, xunit project,
+  git repository, config, impression store, proof gate installed and executable,
+  and `CLAUDE.md`, committed. A skill-owned asset rather than a `scripts/` entry,
+  because consumers need it.
+- The spawned repository loads Waterflow with `claude --plugin-dir`, via
+  gitignored `wf.sh`/`wf.cmd` launchers holding the checkout's absolute path.
+  Installing through the marketplace copies the checkout into the plugin cache
+  pinned to a commit, so edits to a skill are invisible until a reinstall — the
+  opposite of what someone developing the skills needs. `--plugin-dir` reads the
+  working tree. The marketplace manifest stays, demoted to a Distribution note.
+- `.waterflow/config.md` gained a `default proof` row, and `setup-waterflow` now
+  detects the project's test command. The Proof dial had no answer until it was
+  asked for one, which is backwards: `proof.md` requires it be named at routing
+  time.
+- Removed `plan for skills.md`, superseded by `docs/pre-plan-analysis.md`, and
+  trimmed the completed phases out of `docs/build-plan.md`. Pinned both upstream
+  review commits in `ATTRIBUTION.md`; uncle-bob's had never been recorded.
 
 ## 0.2.0
 

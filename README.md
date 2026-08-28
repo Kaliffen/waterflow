@@ -73,23 +73,56 @@ budget, enforced by `scripts/check.mjs`.
 
 ## How to use
 
-### 1. Install
+### 0. Spawn a new .NET solution, already bound
 
-Waterflow ships as one Claude Code plugin. In any repository where you want to
-route work:
+One command produces a git repository with a solution, a library, an xunit test
+project, the Waterflow config, the impression store, the proof gate installed as
+a pre-commit hook, and a `CLAUDE.md` pointing at the router — committed, with
+nothing left to answer:
+
+```sh
+sh path/to/waterflow/skills/setup-waterflow/new-dotnet-repo.sh Checkout
+```
+
+It takes an optional second argument for the parent directory, and needs
+`dotnet` and `git`. The default proof is recorded as `dotnet test`.
 
 ```
-/plugin marketplace add Kaliffen/waterflow
-/plugin install waterflow@waterflow
+Checkout/
+  Checkout.slnx
+  src/Checkout/                  library
+  tests/Checkout.Tests/          xunit, referencing the library
+  .waterflow/config.md           state surface, store, authority label, proof
+  .waterflow/items/              work items
+  .waterflow/impressions/        what the flow learns
+  .git/hooks/pre-commit          the proof gate
+  CLAUDE.md                      points at the router
+  wf.sh, wf.cmd                  start Claude with this checkout loaded
 ```
 
-To run against a local checkout instead of GitHub, point the marketplace at the
-directory:
+Waterflow is not copied into the new repository. The launchers hold an absolute
+path to the checkout you ran the script from, so an edit to a skill here is live
+in the new solution on the next session:
 
+```sh
+cd Checkout
+./wf.sh
 ```
-/plugin marketplace add /path/to/waterflow
-/plugin install waterflow@waterflow
+
+They are gitignored, since the path is true on one machine only. For any other
+stack, or an existing repository, use the two steps below instead.
+
+### 1. Load it into an existing repository
+
+Waterflow is one Claude Code plugin, loaded from a checkout on disk:
+
+```sh
+claude --plugin-dir /path/to/waterflow
 ```
+
+The flag is per-session and reads the working tree directly — nothing is copied
+or pinned, so the skills are whatever the checkout currently says. Worth an alias
+or a two-line launcher in any repository you route work in regularly.
 
 Codex reads `.codex-plugin/plugin.json` from the same checkout.
 
@@ -256,5 +289,13 @@ control characters. `scripts/test-proof-gate.sh` drives the pre-commit gate
 against a throwaway repository. CI runs both on every push, on Linux — which is
 where a gate authored on Windows fails, since msys grep hides a trailing CR and
 Windows reports every file as executable.
+
+## Distribution
+
+`--plugin-dir` is the way Waterflow is used. `.claude-plugin/marketplace.json`
+exists so it *can* be published as an installable plugin
+(`/plugin marketplace add Kaliffen/waterflow`), but that path copies a snapshot
+of the checkout into the plugin cache, pinned to a commit, which is wrong for
+anyone working on the skills themselves. Nothing in the flow above uses it.
 
 MIT.

@@ -28,6 +28,14 @@ jobs:
 
       # A CRLF hook dies with "bad interpreter: /bin/sh^M". .gitattributes is
       # supposed to prevent it; this proves the checkout actually honoured it.
+      - name: Shell scripts parse
+        run: |
+          status=0
+          for f in $(find . -name '*.sh' -not -path './.git/*'); do
+            sh -n "$f" || { echo "syntax error in $f"; status=1; }
+          done
+          exit $status
+
       - name: Shipped shell is LF and has an intact shebang
         run: |
           status=0

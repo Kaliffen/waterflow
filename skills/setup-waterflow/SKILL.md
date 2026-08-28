@@ -14,6 +14,10 @@ router.
 Ask **one question at a time** and propose the default. A list of four questions
 gets one answer.
 
+For a **new .NET solution**, `new-dotnet-repo.sh` beside this skill does all of
+the below in one command and answers every question from the project itself. Use
+it instead of this skill when the repository does not exist yet.
+
 ## 1. Read the repository first
 
 Before asking anything, look. The answers are usually on disk:
@@ -23,6 +27,9 @@ Before asking anything, look. The answers are usually on disk:
 - Is there existing agent instruction (`CLAUDE.md`, `AGENTS.md`)?
 - Is work already tracked somewhere — a backlog file, `gh` configured with open
   issues, a `docs/` process?
+- What command runs the tests — `dotnet test`, `npm test`, `cargo test`,
+  `pytest`? That becomes the `default proof`, so the Proof dial has an answer
+  before the first routing rather than after it.
 
 Report what you found, then ask about only what is genuinely open.
 
@@ -71,6 +78,7 @@ facts and the owner takes decisions does not change.
 | items path | .waterflow/items/ |
 | impressions path | .waterflow/impressions/ |
 | authority label | the owner |
+| default proof | <the project's test command> |
 
 ## Mapping notes
 
