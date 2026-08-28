@@ -5,7 +5,7 @@ subject:  reporting
 blockers: []
 state:    closed
 proof:    pass
-revision: d5632f0
+revision: 5d70160
 ---
 A reader following the block rules produces a block the rules accept. Every atom
 that the run touched appears as a row, including the ones that did not run, and

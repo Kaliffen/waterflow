@@ -5,7 +5,7 @@ subject:  impressions
 blockers: [reporting-1a4c]
 state:    closed
 proof:    pass
-revision: d5632f0
+revision: 5d70160
 ---
 An atom finishing an operation learns from one file both what to emit and what to
 report, because the two happen in the same beat. A record describing a

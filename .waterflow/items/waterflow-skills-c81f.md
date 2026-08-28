@@ -5,7 +5,7 @@ subject:  waterflow-skills
 blockers: [reporting-1a4c, impressions-7b2e, parallel-work-3f9d]
 state:    closed
 proof:    pass
-revision: 4f692f0
+revision: 5d70160
 ---
 A reader looking for the rule about joining a dispatched agent, about slices
 touching disjoint paths, about what a report contains, or about contradicting

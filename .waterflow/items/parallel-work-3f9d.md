@@ -5,7 +5,7 @@ subject:  parallel-work
 blockers: []
 state:    closed
 proof:    pass
-revision: d5632f0
+revision: 5d70160
 ---
 Two peer sessions editing one checkout are as clearly forbidden as two agents,
 because the rule is stated about writers rather than about agents. Choosing a
