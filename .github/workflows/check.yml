@@ -1,0 +1,42 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Structure, links, manifests, BOMs, control characters, budget.
+      - name: Validate repository
+        run: node scripts/check.mjs
+
+      # The gate is POSIX sh parsed by real GNU grep here. That is the point:
+      # the msys tooling on a Windows workstation strips a trailing CR and
+      # reports every file as executable, so gate defects are invisible there
+      # and only surface on a runner like this one.
+      - name: Proof gate fixtures
+        run: sh scripts/test-proof-gate.sh
+
+      # A CRLF hook dies with "bad interpreter: /bin/sh^M". .gitattributes is
+      # supposed to prevent it; this proves the checkout actually honoured it.
+      - name: Shipped shell is LF and has an intact shebang
+        run: |
+          status=0
+          for f in $(find . -name '*.sh' -not -path './.git/*'); do
+            if grep -qU $'\r' "$f"; then
+              echo "CRLF in $f"; status=1
+            fi
+            if [ "$(head -1 "$f")" != "#!/bin/sh" ]; then
+              echo "bad shebang in $f: $(head -1 "$f")"; status=1
+            fi
+          done
+          exit $status

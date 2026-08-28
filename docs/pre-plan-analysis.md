@@ -14,6 +14,10 @@ Sources read in full or in depth:
 
 ---
 
+> `plan for skills.md` was the captured Crow City source. It was removed once
+> its insights had been absorbed here; recover it with
+> `git show 434f5c4:"plan for skills.md"`.
+
 ## 1. The Framing Bug In `plan for skills.md`
 
 `plan for skills.md` is a good document aimed at the wrong repository.

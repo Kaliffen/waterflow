@@ -23,8 +23,13 @@ an entire exploration loop.
 2. **Query.**
 
    ```sh
-   grep -rl 'tags:.*\bSUBJECT\b' .waterflow/impressions/ | sort -r
+   grep -rlE 'tags: *\[([^]]*, *)?SUBJECT( *,|\])' .waterflow/impressions/ | sort -r
    ```
+
+   Tags are kebab-case, so a word-boundary match is wrong: `\bcheckout\b` also
+   matches the tag `checkout-flow`, because `-` ends a word. The pattern above
+   anchors on the list separators instead, and is POSIX ERE so it behaves the
+   same under BSD grep.
 
 3. **Exclude superseded.** Collect every id named in a `supersedes:` line and
    drop those records. Include them only when the question is how something
@@ -34,15 +39,22 @@ an entire exploration loop.
    grep -rh '^supersedes:' .waterflow/impressions/
    ```
 
-4. **Check freshness.** For each surviving record, compare its `revision` and
-   `scope` against HEAD:
+4. **Check freshness.** For each surviving record, first check the anchor is
+   still reachable, then compare its `scope` against HEAD:
 
    ```sh
+   git merge-base --is-ancestor REVISION HEAD 2>/dev/null || echo unreachable
    git log --oneline REVISION..HEAD -- SCOPE
    ```
 
    Non-empty output means stale. A record with `scope: []` is never stale this
    way.
+
+   **An unreachable anchor is not freshness.** After a rebase, amend, or
+   squash-merge the recorded revision no longer exists on this branch, and
+   `git log` then prints nothing — which reads exactly like a fresh record. Run
+   the ancestry check first and report such a record as **freshness unknown**,
+   never as current.
 
 5. **Report gists, newest first.** One line each: the gist, the atom, and the
    date. Mark stale records as **stale since `<revision>`**. Read a record's

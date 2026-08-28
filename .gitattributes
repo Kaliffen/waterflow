@@ -1,0 +1,9 @@
+# Shipped shell runs on whatever host the consumer is on. A CRLF hook dies with
+# "bad interpreter: /bin/sh^M" on any POSIX shell, so these are never CRLF.
+*.sh    text eol=lf
+*.mjs   text eol=lf
+
+# Impression records are parsed line-by-line by proof-gate.sh. GNU grep does not
+# strip a trailing CR, so a record committed from Windows would silently stop
+# matching. Keep the store LF everywhere.
+*.md    text eol=lf

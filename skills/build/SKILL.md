@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # Build
 
-One slice per run. Run these atoms in order; each emits.
+One slice per run. Run these atoms in order.
 
 1. **`recall`** the subject — the seam, the terms, what is already proven.
 2. **`test`** — one failing test at the confirmed seam, then the minimum code
@@ -15,8 +15,10 @@ One slice per run. Run these atoms in order; each emits.
 3. **`prove`** — run the named proof and record the state and revision.
 4. **`critique`** — two axes, in parallel, not merged.
 
-Take the slice named as an argument, or `list_frontier` and take one whose
-blockers are all closed. Do not start a slice that is blocked.
+Take the slice named as an argument, or one returned by `list_frontier` — the
+frontier is already defined as open items with no unfinished blockers, so
+anything it returns can start. See
+[state-surface.md](../waterflow/references/state-surface.md).
 
 **Done when** `prove` recorded a `pass` at the current revision and `critique`
 reported. A `fail` is a finished run too — report it and stop rather than

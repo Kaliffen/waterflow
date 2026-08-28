@@ -1,0 +1,13 @@
+{
+  "name": "waterflow",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Factory-side scripts for the Waterflow plugin. Not published; the distribution unit is the plugin.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "test:gate": "sh scripts/test-proof-gate.sh",
+    "test": "npm run check && npm run test:gate"
+  }
+}

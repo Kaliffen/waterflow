@@ -136,14 +136,22 @@ positively, and even then pair it with the positive target.
 
 ## Waterflow rules
 
-These extend the above and are specific to this repository. `AGENTS.md` carries
-the full list; `scripts/check.mjs` enforces what is checkable.
+These extend the above and govern any skill written in the Waterflow style.
 
-1. **Plain verbs only.** An atom is named for the operation it performs.
+1. **Plain verbs only.** An atom is named for the operation it performs. The
+   product name may carry a metaphor; the working vocabulary may not.
 2. **No project-specific roles.** Shipped prose says `the owner` or plain second
-   person, never a role belonging to one consumer.
-3. **Composites are thin.** A composite declares a sequence of atoms. Rules
-   belong in atoms.
-4. **Every atom emits.** Against the single contract in
-   `../waterflow/references/impressions.md`. No atom restates the schema.
-5. **Borrowed files carry a `source:` line.** See `ATTRIBUTION.md`.
+   person, never a role belonging to one consumer. Teams set their own label at
+   setup.
+3. **Composites are thin.** A composite declares a sequence of atoms. Judgement
+   belongs in atoms.
+4. **Every atom that settles something emits.** Against the single contract in
+   [impressions.md](../waterflow/references/impressions.md), which also names
+   the one read-half exception. No atom restates the schema.
+5. **Borrowed files carry a `source:` line** in frontmatter, naming the upstream
+   repository, the commit taken from, the path, and whether it was copied,
+   adapted, or cited. The commit is what makes later upstream drift diffable.
+
+A repository shipping these skills will have its own contributor instructions
+and its own validation; those are the authority on anything above that is
+mechanically checkable.

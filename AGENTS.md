@@ -51,13 +51,18 @@ any skill. The rules below are the ones that are checkable, and
 3. **Atoms are model-invoked, composites are user-invoked (D6).** Two
    user-invoked skills cannot call each other, so anything another skill must
    reach carries a description. Anything a human types does not.
-4. **Composites are thin.** A composite declares a sequence of atoms. If it
-   grows rules of its own, the rules belong in an atom.
+4. **Composites are thin.** A composite declares a sequence of atoms, plus at
+   most the state-surface calls that open and close the work (`list_frontier`,
+   `close_item`) and the integration step itself, which no atom owns. Judgement
+   belongs in an atom: if a composite grows a rule about *how* to decide
+   something, that rule is in the wrong file.
 5. **No rule lives in two places.** If two skills need the same rule, it becomes
    a reference both point at, never text copied into both.
-6. **Every atom emits (D10).** Atoms write impression records against the single
-   shared contract in `skills/waterflow/references/impressions.md`. No atom
-   restates the schema.
+6. **Every atom that settles something emits (D10).** Atoms write impression
+   records against the single shared contract in
+   `skills/waterflow/references/impressions.md`. No atom restates the schema.
+   `recall` is the sole exception, being the store's read half; the contract
+   names it.
 7. **Description budget: 11 model-invoked skills.** This is the only permanent
    context cost Waterflow imposes on a consumer. A twelfth must displace one.
 8. **Borrowed files carry provenance.** See `ATTRIBUTION.md`.
@@ -66,11 +71,19 @@ any skill. The rules below are the ones that are checkable, and
 ## Validation
 
 ```
-node scripts/check.mjs
+npm test                             # check.mjs + the proof-gate fixtures
 claude plugin validate . --strict
 ```
 
-Both must pass before publishing. `check.mjs` verifies that every skill has a
-`SKILL.md`, that frontmatter keys are known, that relative links resolve, that
-the plugin manifest lists exactly the skills on disk, and that no file carries a
-BOM.
+Both must pass before publishing, and CI runs the first on every push.
+
+`check.mjs` verifies that every skill has a `SKILL.md`, that frontmatter keys are
+known, that relative links resolve, that the plugin manifest lists exactly the
+skills on disk, that the two manifests agree on version, and that no file carries
+a BOM or a stray control character.
+
+`scripts/test-proof-gate.sh` runs the gate against a throwaway repository, one
+case per behaviour. Add a case there before changing the gate: the msys tooling
+on a Windows workstation strips a trailing CR and reports every file as
+executable, so a gate defect can be invisible locally and still break every
+consumer on macOS or Linux.

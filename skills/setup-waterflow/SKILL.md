@@ -1,7 +1,6 @@
 ---
 name: setup-waterflow
 description: Bind Waterflow to this repository. Run once, before routing anything.
-argument-hint: ""
 disable-model-invocation: true
 source: mattpocock/skills @ 6654f6b — skills/engineering/setup-matt-pocock-skills/SKILL.md (adapted)
 ---
@@ -90,9 +89,25 @@ recorded `pass` stale. It reads the store directly, asks no model anything, and
 costs nothing on any turn.
 
 Offer it; do not install it silently — a hook that appears without being asked
-for is the fastest way to get Waterflow uninstalled. If accepted, copy it into
-`.git/hooks/pre-commit`, or call it from the existing hook if there is one. Say
-that `WATERFLOW_GATE=warn` downgrades a refusal to a warning.
+for is the fastest way to get Waterflow uninstalled. Say that `WATERFLOW_GATE=warn`
+downgrades a refusal to a warning.
+
+If accepted, copy it to `.git/hooks/pre-commit` — or call it from the existing
+hook if there is one — and then **make it executable**:
+
+```sh
+chmod +x .git/hooks/pre-commit
+```
+
+Windows reports every file as executable, so a gate installed there appears to
+work while the same install on macOS or Linux is skipped by git in silence. Do
+the `chmod` on every host rather than deciding whether this one needs it.
+
+The gate finds the store on its own: `$WATERFLOW_IMPRESSIONS` first, then the
+`impressions path` row of `.waterflow/config.md`, then the default. If step 3
+put impressions anywhere but the default, confirm that row is present and
+spelled exactly as written above — the gate exits silently when it cannot find
+the directory.
 
 ## 7. Point the agent instructions at the router
 

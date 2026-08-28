@@ -8,7 +8,8 @@ in `SKILL.md`.
 
 ## Frontmatter
 
-Known keys, and the only ones `scripts/check.mjs` accepts:
+The known set. A validator in the shipping repository should reject anything
+else, so an unrecognised key is a typo rather than an extension point:
 
 | Key | Meaning |
 |---|---|
@@ -17,7 +18,7 @@ Known keys, and the only ones `scripts/check.mjs` accepts:
 | `argument-hint` | Optional. The shape of arguments the skill accepts. |
 | `disable-model-invocation` | `true` makes the skill user-invoked. Omit for model-invoked. |
 | `allowed-tools` | Optional tool restriction. |
-| `source` | Required on borrowed files. See `ATTRIBUTION.md`. |
+| `source` | Required on borrowed files. Upstream repo, commit, path, and tier. |
 
 ## Invocation
 
@@ -57,9 +58,10 @@ rather than letting the composite thicken.
 ## The description budget
 
 Model-invoked descriptions are the only permanent cost Waterflow imposes on a
-consumer's context, in every repo, on every turn. The budget is **11**, enforced
-by `scripts/check.mjs`. A twelfth model-invoked skill must displace an existing
-one, and that is a decision to take deliberately rather than by accretion.
+consumer's context, in every repo, on every turn. The budget is **11**, and it is
+enforced mechanically rather than by good intentions. A twelfth model-invoked
+skill must displace an existing one, and that is a decision to take deliberately
+rather than by accretion.
 
 Before adding one, check whether the material could instead be a reference that
 an existing skill points at. A reference costs nothing until it is read.

@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # Land
 
-Run these atoms in order; each emits.
+Run these atoms in order.
 
 1. **`critique`** against the integration point, not against the last commit.
    The diff that matters is everything going in.

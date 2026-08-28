@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # Align
 
-Run these atoms in order. Each emits; do not restate their rules here.
+Run these atoms in order. Do not restate their rules here.
 
 1. **`recall`** the subject. Open by saying what is already settled, and mark
    anything stale.

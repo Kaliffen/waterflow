@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # Shape
 
-Run these atoms in order. Each emits; do not restate their rules here.
+Run these atoms in order. Do not restate their rules here.
 
 1. **`recall`** the subject. If there are no live `define` or `interrogate`
    records, the work is not settled — run `align` first.

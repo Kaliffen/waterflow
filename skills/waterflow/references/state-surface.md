@@ -41,10 +41,69 @@ makes them mean something rather than decorate the list.
 
 ## Adapters
 
-**Local markdown (default).** One file per item at `.waterflow/items/<id>.md`,
-frontmatter carrying the item fields, body carrying the description. Chosen as
-the default because it needs no account, no network, and no permission, and it
-diffs.
+**Local markdown (default).** Chosen as the default because it needs no account,
+no network, and no permission, and it diffs. One file per item at
+`.waterflow/items/<id>.md`:
+
+```
+---
+id:       checkout-a4f2
+title:    Reject an expired card at checkout
+subject:  checkout
+blockers: [checkout-9c11]
+state:    open
+---
+A customer whose card expired before the order is placed sees the card
+rejected at the payment step, with the reason named, and the cart intact.
+```
+
+| Field | Meaning |
+|---|---|
+| `id` | `<subject>-<4 hex>`. Matches the filename. Never reused. |
+| `title` | One line, behaviour from the caller's point of view. |
+| `subject` | The kebab-case noun this item belongs to. Same vocabulary as an impression's `subject`. |
+| `blockers` | Ids that must be `closed` before this can start. `[]` when it can start now. |
+| `state` | `open` or `closed`. |
+| `proof` | Closed items only. `pass` / `fail` / `blocked`, from the `prove` record. |
+| `revision` | Closed items only. The revision the proof ran at. |
+
+The body is the description. It says what the slice delivers end to end, in the
+project's own words, and avoids file paths and code snippets — they go stale
+faster than the item does.
+
+The id embeds the subject so a `blockers` list reads without a lookup, and the
+four hex characters keep two branches from colliding on the same number. This is
+the same shape as an impression id for the same reason.
+
+### The operations, concretely
+
+**`create_item`** — allocate an id, write the file, return the id. Write in
+dependency order so a blocker exists before anything names it.
+
+**`get_item`** — read `.waterflow/items/<id>.md`. Missing file is "nothing",
+not an error.
+
+**`close_item`** — set `state: closed` and add `proof` and `revision` from the
+`prove` record. Never close without both: an item closed with no recorded proof
+is the exact claim this design exists to prevent.
+
+**`list_frontier`** — open items whose blockers are all closed:
+
+```sh
+for f in .waterflow/items/*.md; do
+  grep -q '^state: *open *$' "$f" || continue
+  blockers=$(sed -n 's/^blockers: *//p' "$f" | tr -d '[]' | tr ',' ' ')
+  ready=yes
+  for b in $blockers; do
+    grep -q '^state: *closed *$' ".waterflow/items/$b.md" 2>/dev/null || ready=no
+  done
+  [ "$ready" = yes ] && echo "$f"
+done
+```
+
+A blocker id naming a file that does not exist counts as **not closed**. A
+dangling reference is a mistake in the breakdown, and treating it as satisfied
+would let a slice start on a blocker nobody wrote.
 
 **GitHub Issues.** `create_item` opens an issue; `subject` becomes a label;
 `blockers` are recorded as a task list in the body; `list_frontier` filters open

@@ -73,6 +73,10 @@ and a growing tag vocabulary is the taxonomy tax this design exists to avoid.
 
 ## Emitting
 
+Every atom that **settles** something emits. `recall` is the one exception: it is
+the read half of the store and writes nothing, so a composite opening with
+`recall` is not skipping an emission. Nothing else is exempt.
+
 1. **Recall first.** Query for live records with the same `atom` and `subject`.
 2. **Supersede what you replace.** If a live record makes the same kind of claim
    about the same subject, its id goes in `supersedes`. This is the eviction
@@ -92,8 +96,12 @@ record already says. An empty record costs retrieval attention forever.
 Live records tagged `checkout`, newest first:
 
 ```sh
-grep -rl 'tags:.*\bcheckout\b' .waterflow/impressions/ | sort -r
+grep -rlE 'tags: *\[([^]]*, *)?checkout( *,|\])' .waterflow/impressions/ | sort -r
 ```
+
+Tags are kebab-case, so the pattern anchors on the list separators rather than
+on word boundaries: `\bcheckout\b` would also match `checkout-flow`, since `-`
+ends a word. POSIX ERE, so BSD and GNU grep agree.
 
 Then drop the superseded ones. A record is superseded when its id appears in
 another record's `supersedes`:
@@ -111,12 +119,19 @@ A record's claim was true at its `revision`. It is **stale** when a file under
 its `scope` has changed since:
 
 ```sh
+git merge-base --is-ancestor <revision> HEAD 2>/dev/null || echo unreachable
 git log --oneline <revision>..HEAD -- <scope paths>
 ```
 
 Non-empty output means stale. A record with `scope: []` is never stale by code
 drift — a settled term or decision is displaced by a human superseding it, not by
 a commit landing.
+
+The ancestry check comes first because a rebase, amend, or squash-merge orphans
+the anchor, and `git log` against an unreachable revision prints nothing — which
+is indistinguishable from a fresh record. Three states, not two: **fresh**,
+**stale**, and **freshness unknown**. The third is reported, never rounded down
+to the first.
 
 **A stale record is surfaced as stale, never silently served.** Report it as
 "stale since `<revision>`" and let the reader decide whether to trust it or

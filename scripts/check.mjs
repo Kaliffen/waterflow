@@ -6,8 +6,9 @@
 //   2. frontmatter keys are in the known set, and name matches the directory
 //   3. relative markdown links resolve on disk
 //   4. .claude-plugin/plugin.json lists exactly the skills on disk
-//   5. no file carries a UTF-8 BOM
+//   5. no file carries a UTF-8 BOM or a stray control character
 //   6. model-invoked skill count stays within the description budget
+//   7. the Claude and Codex manifests agree on version
 
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { join, dirname, resolve, relative, sep } from "node:path";
@@ -16,6 +17,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SKILLS_DIR = join(ROOT, "skills");
 const MANIFEST = join(ROOT, ".claude-plugin", "plugin.json");
+const CODEX_MANIFEST = join(ROOT, ".codex-plugin", "plugin.json");
 const DESCRIPTION_BUDGET = 11;
 
 const KNOWN_FRONTMATTER_KEYS = new Set([
@@ -62,12 +64,25 @@ function readFrontmatter(text) {
   return out;
 }
 
-// --- 5. BOMs -----------------------------------------------------------------
+// --- 5. BOMs and control characters ------------------------------------------
+// A stray control character is invisible in every editor and survives review.
+// Tab, newline and carriage return are the only ones text here may contain.
+const CONTROL = /[\x00-\x08\x0b\x0c\x0e-\x1f]/;
 const allFiles = walk(ROOT);
 for (const f of allFiles) {
   const buf = readFileSync(f);
   if (buf[0] === 0xef && buf[1] === 0xbb && buf[2] === 0xbf) {
     fail(`BOM: ${rel(f)} starts with a UTF-8 BOM`);
+  }
+  const text = buf.toString("utf8");
+  const lines = text.split("\n");
+  for (let i = 0; i < lines.length; i++) {
+    const m = CONTROL.exec(lines[i]);
+    if (m) {
+      const code = "0x" + m[0].charCodeAt(0).toString(16).padStart(2, "0");
+      fail(`control: ${rel(f)}:${i + 1} contains ${code}`);
+      break;
+    }
   }
 }
 
@@ -158,6 +173,24 @@ if (!existsSync(MANIFEST)) {
         if (!skillNames.includes(name)) fail(`manifest: lists ${name}, which is not on disk`);
       }
     }
+  }
+}
+
+// --- 7. manifest version agreement -------------------------------------------
+// The two manifests are published together; a version that moves in one and not
+// the other ships a plugin whose hosts disagree about what it is.
+if (existsSync(MANIFEST) && existsSync(CODEX_MANIFEST)) {
+  try {
+    const claude = JSON.parse(readFileSync(MANIFEST, "utf8"));
+    const codex = JSON.parse(readFileSync(CODEX_MANIFEST, "utf8"));
+    if (claude.version !== codex.version) {
+      fail(
+        `manifest: version drift — .claude-plugin says ${claude.version}, ` +
+          `.codex-plugin says ${codex.version}`,
+      );
+    }
+  } catch {
+    // JSON errors are already reported by the manifest check above.
   }
 }
 
