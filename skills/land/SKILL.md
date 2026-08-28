@@ -18,8 +18,9 @@ Run these atoms in order.
    being landed whose anchor predates what it describes — including the ones
    emitted and closed earlier in the build, which are most of them. See
    [impressions.md](../waterflow/references/impressions.md).
-4. **Consolidate** any subject this leaves with no open items: its watermarks
-   move to `history` and what they established stays. See the fold in
+4. **Consolidate** each subject this work finished — one that had items and now
+   has none open. Its watermarks move to `history` and what they established
+   stays. See the fold in
    [impressions.md](../waterflow/references/impressions.md).
 
 **Done when** every slice in the work is closed on the state surface, the proof

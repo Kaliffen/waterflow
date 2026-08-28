@@ -57,6 +57,12 @@ any skill. The rules below are the ones that are checkable, and
    `close_item`) and the integration step itself, which no atom owns. Judgement
    belongs in an atom: if a composite grows a rule about *how* to decide
    something, that rule is in the wrong file.
+
+   Integration includes making the store true, so `land` may also re-anchor
+   records and consolidate a finished subject. Those two writes are named here
+   rather than argued case by case, because "no atom owns it" is an argument
+   that works every time and would otherwise admit anything. A composite still
+   only declares the step; the rule behind it stays in a reference.
 5. **No rule lives in two places.** If two skills need the same rule, it becomes
    a reference both point at, never text copied into both.
 6. **Every atom that settles something emits (D10).** Atoms write impression

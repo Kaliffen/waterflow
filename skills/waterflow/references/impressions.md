@@ -8,12 +8,11 @@ was confirmed, a term that was defined, a proof that ran. Records are a byproduc
 of doing the work, never a curation task. If a step ever asks a human to tidy the
 store, that step is wrong.
 
-Consolidating a finished subject is not tidying, and the difference is who does
-it and when. Tidying is a chore handed to a person because the store got
-untidy; consolidating is an atom emitting what it just established, at the one
-moment the flow already knows the work is over. Nothing is graded, nothing is
-rewritten by hand, and skipping it degrades retrieval rather than breaking
-anything.
+Consolidating a finished subject is not tidying, and the difference is when it
+fires and who decides what to keep. Tidying is a chore handed to a person once
+the store has got untidy, and the judgement is theirs. Consolidating fires at a
+moment the flow already knows — the work is integrated and nothing is open — and
+what it keeps is decided by the kinds, not by taste.
 
 The point is that context becomes *queried* rather than *loaded*. Briefing a cold
 subagent is "the live records tagged `checkout`", not a pasted conversation.
@@ -32,8 +31,7 @@ host.
 **Spent watermarks live beside the store, not in it**, in a `history` directory
 that is the impressions directory's sibling — `.waterflow/history` by default,
 and `docs/history` for a store relocated to `docs/store`. Nothing reads it, and
-nothing writes it yet: the step that moves a watermark there is part of
-consolidating a subject whose work is finished.
+the only thing that writes it is the fold.
 
 That is a sibling rather than a subdirectory on purpose. Retrieval is `grep -r`
 over the store, so a subdirectory would still be found, and the exclusion would
@@ -116,7 +114,7 @@ Which atom writes which kind, so no atom has to decide twice:
 
 | Atom | Kind |
 |---|---|
-| `seam`, `prove` with a verdict | `fact` |
+| `seam`, `test`, `prove` with a verdict | `fact` |
 | `critique`, `dig`, `probe`, `prove` with a measurement | `observation` |
 | `define`, `interrogate` | `idiom` |
 | `slice` | `watermark` |
@@ -139,15 +137,32 @@ surface already knows when work is over, so nothing has to judge it. A subject
 still being worked on is never consolidated, and a build of nine slices
 consolidates once, at the end, rather than after each one.
 
+Consolidate a subject only if it has ever had items and none are open now. A
+subject that was never tracked is not finished, it is untracked, and an empty
+frontier cannot tell the two apart on its own.
+
 What happens is two things, and only the first is new:
 
 1. **Watermarks move to `history`.** The process is over, so the record of how
    it ran leaves the retrieval path. It is not deleted and not superseded —
-   moved. See [where records live](#where-records-live).
-2. **Everything else stays, re-anchored.** Facts, observations, idioms and goals
+   moved. Superseding says a claim was replaced; a watermark was not replaced,
+   it was spent.
+
+   **In an existing store, find them by atom, not by `kind`.** Most records
+   anywhere predate the field, so a query for `kind: watermark` moves nothing
+   and reports success, which is the quietest way this step can fail. A record
+   with no `kind` is classified by the atom that emitted it, through the table
+   in the kinds above. When an atom is not in that table, leave the record
+   alone: an unmoved record costs a line of retrieval, and a wrongly moved one
+   is knowledge that has silently left the store.
+
+2. **Everything else stays where it is.** Facts, observations, idioms and goals
    are what the work established, and they are the subject's live state
-   afterwards. They are brought to the integrated revision by the rule in
-   [Staleness](#staleness), exactly as closed items are.
+   afterwards. Consolidation does not rewrite them, supersede them or re-anchor
+   them — a fact nothing re-ran is not made truer by being restated at a newer
+   revision. The records the landed work itself emitted are re-anchored, but by
+   the integration rule under **Staleness**, which is a separate step that runs
+   whether or not anything is consolidated.
 
 **Facts do not rot on their own, because nothing changes unless a process runs.**
 A fact is invalidated by a later process touching the same code, and that process
