@@ -68,11 +68,20 @@ Under 400 words."*
 in the diff nobody asked for; (c) requirements that look implemented but look
 wrong. Quote the source line for each finding. Under 400 words."*
 
-## 5. Aggregate
+Both briefs are bounded: one deliverable, one word budget, one join point — this
+step. Neither subagent dispatches further agents, and neither fixes anything it
+finds. See [topology.md](../waterflow/references/topology.md).
+
+## 5. Join and aggregate
 
 Present both under `## Standards` and `## Spec`, verbatim or lightly cleaned.
 **Do not merge or re-rank across axes** — that is exactly the collapse the
 separation exists to prevent.
+
+Both axes are joined here. If one did not return, report the axis as `⏸️` with
+the reason and never present a single-axis run as a review. If the two axes
+contradict each other on the same hunk, that contradiction is itself a finding —
+name it, do not resolve it by preferring one.
 
 End with one line: findings per axis, and the worst issue *within each axis*. No
 single winner across axes.

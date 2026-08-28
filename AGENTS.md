@@ -24,6 +24,7 @@ Factory surfaces, which stay here:
 
 - `scripts/`, `docs/`, `README.md`, `CHANGELOG.md`, `AGENTS.md`,
   `ATTRIBUTION.md`, `.review/`, CI configuration.
+- `.waterflow/` — this repository's own impression store and work items.
 
 Rules:
 
@@ -87,3 +88,21 @@ case per behaviour. Add a case there before changing the gate: the msys tooling
 on a Windows workstation strips a trailing CR and reports every file as
 executable, so a gate defect can be invisible locally and still break every
 consumer on macOS or Linux.
+
+## Building Waterflow With Waterflow
+
+This repository uses the flow it ships. `.waterflow/impressions/` holds real
+records about this codebase; `recall` a subject before deriving it again, and
+emit when an atom settles something here, exactly as a consumer would.
+
+Two things this buys and one it costs. It surfaces contract defects that fixtures
+cannot — the gate warned about a stale proof on its own store before any consumer
+hit it. It keeps the vocabulary honest, because a subject that is awkward to name
+here will be awkward everywhere. The cost is that the store is another surface to
+keep truthful: a record left behind after the code moved is the exact failure
+`recall` exists to prevent, and it is worse here than anywhere because this is
+where the contract is supposed to be demonstrated.
+
+The store is a factory surface. It does not ship, and no shipped skill may read
+it. `.waterflow/` is a convention every consumer repository shares, not this
+repository's layout.

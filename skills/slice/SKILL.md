@@ -22,6 +22,13 @@ start. No blockers means it can start now. Edges are what make
 `list_frontier` mean something — see
 [state-surface.md](../waterflow/references/state-surface.md).
 
+Two slices with no edge between them may be built at the same time, so an edge
+is also how scope collisions get prevented. **Slices that can run in parallel
+must touch disjoint paths.** Where two slices would edit the same files, either
+draw the blocking edge or merge them — leaving both open and unblocked promises
+a parallelism that resolves as a merge conflict. See the one-writer rule in
+[topology.md](../waterflow/references/topology.md).
+
 Use the project's own vocabulary in titles and descriptions. `recall` the
 `define` records for the area first; a slice named in the wrong words is a slice
 someone re-litigates.

@@ -23,3 +23,7 @@ Both run before slicing, not during it.
 a seam record exists for the subject.
 
 Next: `build`.
+
+**Report** the block before moving on: a row per atom, the seam in one line, the
+items published, and what `list_frontier` returns now. Shape:
+[reporting.md](../waterflow/references/reporting.md).

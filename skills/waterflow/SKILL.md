@@ -40,6 +40,10 @@ everything downstream still runs.
 
 Lane `direct` enters no composite: run the atoms the work needs, then prove.
 
+Every atom ends with a one-line report and every composite with a block, so the
+owner sees what ran without reading the transcript. Shape:
+[reporting.md](references/reporting.md).
+
 ## Memory
 
 Atoms emit **impressions**: typed records of what the flow settled, written as a
@@ -55,8 +59,9 @@ Load one when its dial is in play, not before.
 | [dials.md](references/dials.md) | routing, escalation, re-routing |
 | [lanes.md](references/lanes.md) | choosing an entry point |
 | [model-tiers.md](references/model-tiers.md) | tier meanings and moves |
-| [topology.md](references/topology.md) | boundaries, subagents, fan-out |
+| [topology.md](references/topology.md) | boundaries, subagents, fan-out, joining |
 | [proof.md](references/proof.md) | proof kinds, states, freshness |
+| [reporting.md](references/reporting.md) | what to tell the owner, markers, blocks |
 | [decision-rights.md](references/decision-rights.md) | what is always the owner's |
 | [impressions.md](references/impressions.md) | the emission contract |
 | [state-surface.md](references/state-surface.md) | where work items live |

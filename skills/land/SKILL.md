@@ -21,3 +21,8 @@ proof state recorded against the integrated revision is `pass`.
 
 Do not land on a `fail` or a `blocked`. Do not land on a stale `pass` — re-run
 it, which is cheap, and always cheaper than the alternative.
+
+**Report** the block last: a row per atom, the integrated revision, every item
+closed, and the agents dispatched and joined. This is the only account of the
+run anyone reads afterwards. Shape:
+[reporting.md](../waterflow/references/reporting.md).

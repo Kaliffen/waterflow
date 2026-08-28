@@ -56,3 +56,73 @@ emitted.
 None of the questions is objective, and the same boundary can go two ways on two
 days. The value is in asking them **in order, at the boundary**, rather than
 picking a shape by habit in the middle of the work.
+
+## The return leg
+
+Choosing a shape is half the decision. Every shape except `inline` opens a debt,
+and the debt is the part that gets forgotten: an agent was sent somewhere and
+nothing said when it comes back.
+
+**Dispatch names three things or it does not happen:**
+
+| | |
+|---|---|
+| **Deliverable** | What comes back, in what shape, and how long. "Under 400 words, findings per file" — not "look into it". |
+| **Budget** | What counts as too far. A question, not a project: an agent with no ceiling explores until something stops it. |
+| **Join point** | The step that consumes the result. Named before dispatch, not discovered afterwards. |
+
+**Every dispatched agent is joined at or before the boundary that spawned it.**
+A composite never finishes with an agent still running. `background` buys the
+right to keep working while it runs; it does not buy the right to forget it.
+
+When the join point arrives and the agent has not reported, there are two moves
+and you say which one you took: **wait** for it, or **stop it** and continue
+without that input, naming what is now unproven. Letting it run on unwatched is
+not a third option — it is how a session ends with agents still burning.
+
+Two rules keep the fan from widening on its own:
+
+- **A dispatched agent does not dispatch.** Nesting is legal only when the brief
+  says so explicitly and names the ceiling. Otherwise the shape you chose at the
+  boundary is not the shape that ran.
+- **A finding is not a mandate.** An agent that discovers adjacent work reports
+  it. It does not start it, and it does not spawn something to start it. New
+  work is routed at a boundary, by the owner of that boundary.
+
+## Reconciling what comes back
+
+`fan-out` is only legal over independent questions, so the results are
+independent too — and merging them destroys the independence that justified the
+shape.
+
+- **Branches stay separate.** Report each under its own heading. Do not merge
+  into one ranked list; `critique` keeps Standards and Spec apart for exactly
+  this reason.
+- **A contradiction between branches is a finding**, not an average. Two agents
+  that disagree have found something the routing missed. Surface both claims,
+  say which sources they rest on, and escalate — see [dials.md](dials.md).
+- **An overlap is reported once**, attributed to both branches, so agreement
+  reads as corroboration rather than as two problems.
+
+## One writer at a time
+
+Reading fans out freely. **Writing does not.** At most one agent changes the
+working tree at a time.
+
+Two agents editing files concurrently in the same tree is not `fan-out`; it is a
+merge conflict arranged in advance, and neither agent can prove anything because
+the ground moves under both. The cost lands at integration, which is the most
+expensive place for it to land.
+
+Parallel implementation is legal under two conditions together:
+
+1. **Separate trees.** Each agent has its own worktree, branch, or clone, and
+   integration is an explicit step afterwards with its own proof.
+2. **Disjoint scope.** The slices touch different paths. Overlapping scope is a
+   blocking edge that `slice` should have drawn — see
+   [state-surface.md](state-surface.md).
+
+Fail either one and the shape is `inline`, serialized, one slice at a time. That
+is the default `build` already assumes, and it is not a limitation to work
+around: a slice that must run beside another slice on the same files was cut
+wrong.

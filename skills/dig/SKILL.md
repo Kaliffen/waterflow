@@ -30,6 +30,15 @@ The brief:
 3. Report the findings, and report separately anything the sources do **not**
    settle. An unanswered question named is worth more than a plausible guess.
 
+Name the join point before dispatching, and say when the answer stops being
+worth waiting for. A `dig` that has not reported by the step that needs it is
+either waited on or stopped — never left running while the flow moves past it.
+The return leg is in [topology.md](../waterflow/references/topology.md).
+
+A background agent that reports nothing is not a dig that found nothing. Report
+the question as unanswered, emit no record for it, and say the fact is still
+open.
+
 ## Emit
 
 One record per **settled fact**, `atom: dig`, `subject` the thing the fact is

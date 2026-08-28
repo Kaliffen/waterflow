@@ -20,3 +20,7 @@ will matter next loop exists as a record rather than as a memory of the
 conversation.
 
 Next: `shape`, unless the work is small enough to slice inline.
+
+**Report** the block before moving on: a row per atom, the terms settled, the
+questions still open. Shape:
+[reporting.md](../waterflow/references/reporting.md).
