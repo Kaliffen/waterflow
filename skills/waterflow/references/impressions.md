@@ -24,7 +24,9 @@ host.
 
 **Spent watermarks live beside the store, not in it**, in a `history` directory
 that is the impressions directory's sibling — `.waterflow/history` by default,
-and `docs/history` for a store relocated to `docs/store`. Nothing reads it.
+and `docs/history` for a store relocated to `docs/store`. Nothing reads it, and
+nothing writes it yet: the step that moves a watermark there is part of
+consolidating a subject whose work is finished.
 
 That is a sibling rather than a subdirectory on purpose. Retrieval is `grep -r`
 over the store, so a subdirectory would still be found, and the exclusion would

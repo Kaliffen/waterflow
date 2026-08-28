@@ -85,6 +85,12 @@ an entire exploration loop.
    | **Governs** | `idiom` | oldest first — the ones that have survived longest |
    | **Aiming at** | `goal` | unmeasured first |
 
+   A record with no `kind` predates the field, which is most of what is in an
+   existing store. Group it by the atom that emitted it, using the mapping in
+   [impressions.md](../waterflow/references/impressions.md), and say the group
+   was inferred. Do not invent a fifth group for them: a reader wants to know
+   what is known and what is believed, not which records are old.
+
    One line each: the gist, the atom, and the date. Mark a stale record as
    **stale since `<revision>`**, and one whose anchor is unreachable, `unborn`,
    or older than its own subject as **freshness unknown**. Read a record's
@@ -94,8 +100,7 @@ an entire exploration loop.
    goal unmeasured" tells the reader where to look before they read anything.
 
    **A goal with no `observation` naming it is reported unmeasured**, never as
-   met and never silently. A target nobody has measured is the most confident
-   thing a store can be wrong about.
+   met and never silently.
 
    **A record carrying `conditions` shows them beside its gist**, never folded
    into the detail. A measurement whose conditions are one click away is read as
@@ -113,13 +118,21 @@ to prove to be sure of itself? Query it alone when that is the question — befo
 a release, when inheriting an area, or when a decision is about to rest on
 something nobody checked.
 
+This is steps 2 and 3 with one more filter, not a shortcut past them. Take the
+subject's live records exactly as before — the tag query, then the supersede
+exclusion — and keep the ones whose `kind` is `observation`:
+
 ```sh
-grep -rlE '^kind: *observation *$' .waterflow/impressions/ | sort -r
+grep -rlE 'tags: *\[([^]]*, *)?SUBJECT( *,|\])' .waterflow/impressions/ |
+  xargs grep -lE '^kind: *observation *$' | sort -r
 ```
 
-Each one is a debt. It is promoted by running something that could have failed,
-after which it is emitted again as a `fact` superseding the observation. A
-subject whose believed group is longer than its known group is not documented,
+Then drop the superseded ones, as step 3 does. Skipping that turns a paid debt
+back into an outstanding one: an observation that has been promoted is named in
+the `supersedes` of the fact that promoted it, so a list that does not exclude
+it reports as unproven the one thing that was actually proved.
+
+A subject whose believed group is longer than its known group is not documented,
 it is assumed.
 
 ## Briefing with recall
