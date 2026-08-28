@@ -12,7 +12,9 @@ never merge.
 - **Standards** — does the code follow this repository's documented conventions?
 - **Spec** — does it faithfully implement what was asked for?
 
-Both run as **parallel subagents** so neither pollutes the other's context.
+Both run as **parallel subagents** so neither pollutes the other's context. They
+are independent questions — a change can pass one and fail the other — which is
+what makes the shape a legal `fan-out`.
 
 ## Why two axes
 
@@ -79,9 +81,10 @@ Present both under `## Standards` and `## Spec`, verbatim or lightly cleaned.
 separation exists to prevent.
 
 Both axes are joined here. If one did not return, report the axis as `⏸️` with
-the reason and never present a single-axis run as a review. Two axes that
-contradict each other on the same hunk reconcile like any other pair of
-branches: [topology.md](../waterflow/references/topology.md).
+the reason and never present a single-axis run as a review. Where the two
+contradict each other on the same hunk, name the contradiction and leave it
+standing; they are two branches of a fan-out, and reconciling one is in
+[topology.md](../waterflow/references/topology.md).
 
 End with one line: findings per axis, and the worst issue *within each axis*. No
 single winner across axes.

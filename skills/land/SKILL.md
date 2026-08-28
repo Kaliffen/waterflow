@@ -19,8 +19,9 @@ Run these atoms in order.
 **Done when** every slice in the work is closed on the state surface and the
 proof state recorded against the integrated revision is `pass`.
 
-Do not land on a `fail` or a `blocked`. Do not land on a stale `pass` — re-run
-it, which is cheap, and always cheaper than the alternative.
+Do not land on a `fail` or a `blocked`. Do not land on a `pass` that is stale or
+anchored `unborn` — re-run it. See
+[proof.md](../waterflow/references/proof.md).
 
 **Report** the block last:
 [reporting.md](../waterflow/references/reporting.md).

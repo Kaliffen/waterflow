@@ -26,6 +26,12 @@ result, emit the record.
    test, or a narrower one for a suite — a proof that cannot fail for the reason
    the work could be wrong is not proof of that work.
 
+   If the result is a number rather than a pass or a fail, write down what you
+   ran it under as you take it — the scenario, the scale, the seed, how far in.
+   Reconstructing that afterwards is guesswork, and a number whose conditions
+   went unrecorded is the failure in
+   [proof.md](../waterflow/references/proof.md).
+
 4. **Classify.** One of:
 
    | State | When |
@@ -44,12 +50,10 @@ result, emit the record.
    previous `prove` record for the same subject. Contract:
    [impressions.md](../waterflow/references/impressions.md).
 
-6. **Report** the state, the command, and the revision — those are this atom's
-   units for the line every atom ends with, and the marker follows the state:
-   `pass` is `✅`, `fail` is `❌`, `blocked` is `⏸️`. See
-   [impressions.md](../waterflow/references/impressions.md). On `fail`, report
-   what failed and stop — do not start fixing it under the same routing. On
-   `blocked`, report what is missing.
+6. **Report** the state, the command, and the revision — this atom's units for
+   the line in [impressions.md](../waterflow/references/impressions.md). On
+   `fail`, report what failed and stop — do not start fixing it under the same
+   routing. On `blocked`, report what is missing.
 
 ## Do not
 

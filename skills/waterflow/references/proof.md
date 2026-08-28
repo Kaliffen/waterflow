@@ -37,6 +37,10 @@ Never report a stale pass as a pass. Report it as "passed at `<revision>`, stale
 since" and re-run it, which is usually cheap and always cheaper than the
 alternative.
 
+A pass anchored `unborn` was recorded before any commit existed, so it is not
+fresh and not stale — it is unverifiable, and it is re-run on the same terms as
+a stale one. See [impressions.md](impressions.md).
+
 ## Conditions
 
 A revision is not always the whole anchor. A **measurement** — a timing, a rate,
@@ -50,7 +54,7 @@ whose cost rises reports the cheap phase and passes; the same suite measured
 later fails. Nobody lied, and re-running does not help, because the run-in is
 what varies.
 
-A record describing a measurement carries `conditions`: the parameters the
+A record describing a measurement may carry `conditions`: the parameters the
 number depends on, in the units the work uses — the scenario, the scale, the
 seed, how far in it was taken. It is optional, it does not change staleness, and
 nothing gates on it. Its whole job is that `recall` shows the phase beside the
