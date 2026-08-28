@@ -1,0 +1,39 @@
+﻿{
+  "name": "waterflow",
+  "version": "0.1.0",
+  "description": "Agent skills and workflow prompts for Creative Director-led software work.",
+  "author": {
+    "name": "Adam Boes",
+    "url": "https://github.com/Kaliffen"
+  },
+  "homepage": "https://github.com/Kaliffen/waterflow",
+  "repository": "https://github.com/Kaliffen/waterflow",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "skills",
+    "workflow",
+    "planning",
+    "review"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Waterflow",
+    "shortDescription": "Creative Director-led agent workflow skills.",
+    "longDescription": "Waterflow provides composable agent skills, model-tier guidance, and progressively loaded workflow references for planning, implementation, review, and bookkeeping.",
+    "developerName": "Adam Boes",
+    "category": "Productivity",
+    "capabilities": [
+      "Planning",
+      "Review",
+      "Writing"
+    ],
+    "websiteURL": "https://github.com/Kaliffen/waterflow",
+    "defaultPrompt": [
+      "Use Waterflow to route this work.",
+      "Plan this with model tiers.",
+      "Review this workflow shape."
+    ],
+    "brandColor": "#2563EB"
+  }
+}

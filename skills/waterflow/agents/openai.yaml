@@ -1,0 +1,4 @@
+﻿interface:
+  display_name: Waterflow
+  short_description: Route work by phase, risk, and model tier.
+  default_prompt: Use $waterflow to route this work.

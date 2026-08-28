@@ -1,0 +1,12 @@
+﻿# Local scratch
+.tmp/
+tmp/
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+node_modules/
+
+# OS/editor
+.DS_Store
+Thumbs.db

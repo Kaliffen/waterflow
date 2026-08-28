@@ -1,0 +1,7 @@
+﻿{
+  "name": "waterflow",
+  "description": "Agent skills and workflow prompts for Creative Director-led software work.",
+  "version": "0.1.0",
+  "skills": "skills/",
+  "agents": "agents/"
+}
