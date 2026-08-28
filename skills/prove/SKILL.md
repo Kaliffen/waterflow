@@ -44,8 +44,10 @@ result, emit the record.
    broken change sends the next hour in the wrong direction.
 
 5. **Emit.** One record, `atom: prove`, carrying `state`, the `revision` it ran
-   at, and `scope` set to the paths the proof actually covers. A record
-   reporting a measurement may also carry `conditions` — see
+   at, and `scope` set to the paths the proof actually covers. A verdict is a
+   `fact`; a measurement is an `observation` and may also carry `conditions` —
+   this atom is the only one that emits two kinds, because it is the only one
+   that sometimes reports a number instead of a result. See
    [proof.md](../waterflow/references/proof.md). Supersede the
    previous `prove` record for the same subject. Contract:
    [impressions.md](../waterflow/references/impressions.md).

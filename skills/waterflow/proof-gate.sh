@@ -64,13 +64,15 @@ for f in "$DIR"/*.md; do
     continue
   fi
 
-  # Only a fact carries a verdict. An observation is a reading, a goal is a
-  # target, and neither is a result the gate can act on -- so a record that
-  # names any other kind is skipped whatever state it happens to carry. A
-  # record with no kind at all predates the field and is still gated.
-  case $(field kind "$f") in
-    "" | fact) ;;
-    *) continue ;;
+  # Only a fact carries a verdict. An observation is a reading and a goal is a
+  # target, so neither is a result the gate can act on whatever state it
+  # happens to carry. The kinds that do not gate are named one by one, and
+  # anything unrecognised gates: an absent kind is a record older than the
+  # field, and a misspelt one is a typo that must not be able to switch the
+  # gate off silently.
+  kind=$(field kind "$f")
+  case "$kind" in
+    observation | idiom | goal | watermark) continue ;;
   esac
 
   state=$(field state "$f")

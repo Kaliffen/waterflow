@@ -139,6 +139,12 @@ check "a record with no kind is still gated" 1 "Commit refused"
 record_kind fact fail "packages/" "$REV"
 check "a fact gates" 1 "Commit refused"
 
+# A typo must not be able to switch the gate off. An absent kind fails closed,
+# so a misspelt one has to as well, or the quietest possible mistake is also
+# the most dangerous one.
+record_kind observaton fail "packages/" "$REV"
+check "a misspelt kind still gates" 1 "Commit refused"
+
 # No store at all is not an error.
 rm -rf .waterflow
 check "absent store exits clean" 0 -
