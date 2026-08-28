@@ -79,7 +79,9 @@ Present both under `## Standards` and `## Spec`, verbatim or lightly cleaned.
 separation exists to prevent.
 
 Both axes are joined here. If one did not return, report the axis as `⏸️` with
-the reason and never present a single-axis run as a review.
+the reason and never present a single-axis run as a review. Two axes that
+contradict each other on the same hunk reconcile like any other pair of
+branches: [topology.md](../waterflow/references/topology.md).
 
 End with one line: findings per axis, and the worst issue *within each axis*. No
 single winner across axes.
