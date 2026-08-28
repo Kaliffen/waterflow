@@ -24,6 +24,5 @@ a seam record exists for the subject.
 
 Next: `build`.
 
-**Report** the block before moving on: a row per atom, the seam in one line, the
-items published, and what `list_frontier` returns now. Shape:
+**Report** the block before moving on:
 [reporting.md](../waterflow/references/reporting.md).

@@ -38,7 +38,10 @@ result, emit the record.
    broken change sends the next hour in the wrong direction.
 
 5. **Emit.** One record, `atom: prove`, carrying `state`, the `revision` it ran
-   at, and `scope` set to the paths the proof actually covers. Supersede the
+   at, and `scope` set to the paths the proof actually covers. When the result
+   is a measurement rather than a pass or fail, carry `conditions` too — a
+   timing is fresh by revision and still wrong if nobody wrote down the phase it
+   was taken in. See [proof.md](../waterflow/references/proof.md). Supersede the
    previous `prove` record for the same subject. Contract:
    [impressions.md](../waterflow/references/impressions.md).
 

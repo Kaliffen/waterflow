@@ -47,10 +47,8 @@ block on it: a running exploration is an unsettled prerequisite, so only the
 questions downstream of it wait. Ask the rest of the frontier now.
 
 Not blocking is not forgetting. The round that needs the fact is the join
-point: reach it with the subagent still out and you either wait for it or stop
-it and ask the owner instead, saying which. Do not close the interrogation with
-an agent still running — see
-[topology.md](../waterflow/references/topology.md).
+point, and the interrogation does not close with an agent still running. The
+return leg: [topology.md](../waterflow/references/topology.md).
 
 What is always the owner's, and how to hand a decision over:
 [decision-rights.md](../waterflow/references/decision-rights.md).

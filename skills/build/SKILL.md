@@ -26,6 +26,5 @@ carrying on under the same routing.
 
 Next: `land`, or the next slice.
 
-**Report** the block before moving on: a row per atom, the proof state and
-revision, the worst critique finding on each axis, and the agents dispatched and
-joined. Shape: [reporting.md](../waterflow/references/reporting.md).
+**Report** the block before moving on:
+[reporting.md](../waterflow/references/reporting.md).

@@ -21,6 +21,5 @@ conversation.
 
 Next: `shape`, unless the work is small enough to slice inline.
 
-**Report** the block before moving on: a row per atom, the terms settled, the
-questions still open. Shape:
+**Report** the block before moving on:
 [reporting.md](../waterflow/references/reporting.md).

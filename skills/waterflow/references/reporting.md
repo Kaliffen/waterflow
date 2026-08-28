@@ -30,17 +30,8 @@ not colour codes: an ANSI escape is either invisible or literal, never styling.
 
 ## An atom reports one line
 
-Ending an operation, before the record is emitted:
-
-```
-✅ **prove** — `npm test` passed at `9f3c1ab` · 1 impression
-```
-
-The atom name, the outcome in the atom's own units, and what was emitted. Units
-are the atom's: `prove` reports a command and a revision, `recall` reports counts
-and staleness, `test` reports red-to-green transitions, `slice` reports items
-published. A count is not a summary — "3 findings" tells the owner whether to
-look, which is all a line is for.
+Specified with the emission contract, because an atom reports and emits in the
+same beat: [impressions.md](impressions.md).
 
 ## A composite reports a block
 
@@ -58,24 +49,27 @@ Ending an `align`, `shape`, `build`, or `land` run:
 
 ⚠️ **Standards** — `PaymentPort` fake duplicated in two test files.
 
-**Emitted** 2 impressions · **Closed** checkout-a4f2 · **Next** land
+**Emitted** 2 impressions · **Closed** checkout-a4f2 · **Dispatched** 2 · **joined** 2 · **Next** land
 ```
 
 The rules, in order of what goes wrong without them:
 
-1. **One row per atom that ran**, in the order it ran. An atom that was skipped
-   gets a row saying `⏸️ skipped` and why. A missing row reads as an atom that
-   ran silently, which is the worst of the three.
+1. **One row per atom**, in the order it ran, including the ones that did not.
+   An atom that was skipped or blocked gets a row saying `⏸️` and which it was.
+   A missing row reads as an atom that ran silently, which is the worst of the
+   three.
 2. **The worst outcome is stated in full below the table.** A table cell holds a
    count; a `❌` or `⚠️` needs a sentence the owner can act on without asking.
    Everything else stays a count.
 3. **The footer names what persisted**: impressions emitted, items opened or
    closed, and the next step in the flow. This is what makes a run resumable by
    someone who did not watch it.
-4. **Agents are accounted for.** Any run that dispatched an agent says how many
-   were dispatched and that all were joined — see the return leg in
-   [topology.md](topology.md). "Dispatched 2 · joined 2" is a line worth its
-   width; a run that cannot write it has an agent still going.
+4. **Agents are accounted for**, in every block, including the ones that
+   dispatched none. `Dispatched 2 · joined 2` is a line worth its width, and
+   `Dispatched 0` is worth it too: the count is the evidence that the return leg
+   in [topology.md](topology.md) was walked, and a run that cannot write it has
+   an agent still going. Reporting it only when it is interesting means a
+   forgotten agent and a quiet run look identical.
 
 ## Report what happened
 

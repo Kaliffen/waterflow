@@ -106,17 +106,23 @@ shape.
 
 ## One writer at a time
 
-Reading fans out freely. **Writing does not.** At most one agent changes the
+Reading fans out freely. **Writing does not.** At most one **writer** changes a
 working tree at a time.
 
-Two agents editing files concurrently in the same tree is not `fan-out`; it is a
-merge conflict arranged in advance, and neither agent can prove anything because
-the ground moves under both. The cost lands at integration, which is the most
+A writer is anything that changes files in a tree: a session, a subagent, or a
+person at a keyboard. The rule is stated about writers rather than about agents
+because the commonest collision is not two subagents — it is two peer sessions
+open on the same checkout, each of which reads the agent-shaped rule as already
+satisfied. A rule about writers can be checked by counting them.
+
+Two writers editing files concurrently in the same tree is not `fan-out`; it is
+a merge conflict arranged in advance, and neither can prove anything because the
+ground moves under both. The cost lands at integration, which is the most
 expensive place for it to land.
 
 Parallel implementation is legal under two conditions together:
 
-1. **Separate trees.** Each agent has its own worktree, branch, or clone, and
+1. **Separate trees.** Each writer has its own worktree, branch, or clone, and
    integration is an explicit step afterwards with its own proof.
 2. **Disjoint scope.** The slices touch different paths. Overlapping scope is a
    blocking edge that `slice` should have drawn — see

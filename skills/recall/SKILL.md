@@ -54,7 +54,8 @@ an entire exploration loop.
    squash-merge the recorded revision no longer exists on this branch, and
    `git log` then prints nothing — which reads exactly like a fresh record. Run
    the ancestry check first and report such a record as **freshness unknown**,
-   never as current.
+   never as current. A `revision` of `unborn` is the same state, already named:
+   the record was emitted before any commit existed to anchor it.
 
 5. **Report gists, newest first.** One line each: the gist, the atom, and the
    date. Mark stale records as **stale since `<revision>`**. Read a record's

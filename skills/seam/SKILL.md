@@ -53,6 +53,15 @@ Four tests, in order:
    module may be internally composed of small swappable parts — they are just
    not part of the interface. Internal seams are legitimate and private.
 
+A fifth test applies after the fact, and it is the one nothing else catches:
+
+5. **Ownership friction is seam evidence.** When two writers keep editing the
+   same value, or argue over what it should be, the value is owned by the wrong
+   module. Read that as a seam problem rather than a coordination problem to be
+   solved with more coordination. It matters because a constant in the wrong
+   place breaks no build and fails no assertion — there is nothing for a test to
+   catch, so friction is the only signal there is.
+
 When the interface is too wide, ask: can I remove a method, simplify a
 parameter, hide more inside?
 

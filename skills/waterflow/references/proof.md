@@ -37,6 +37,25 @@ Never report a stale pass as a pass. Report it as "passed at `<revision>`, stale
 since" and re-run it, which is usually cheap and always cheaper than the
 alternative.
 
+## Conditions
+
+A revision is not always the whole anchor. A **measurement** — a timing, a rate,
+a throughput — also depends on what it was measured under, and those parameters
+do not live in the diff. A proof can therefore be fresh by revision and wrong:
+the code has not moved, but the number was taken under conditions nobody wrote
+down.
+
+The failure mode is specific and it repeats. A number taken early in a scenario
+whose cost rises reports the cheap phase and passes; the same suite measured
+later fails. Nobody lied, and re-running does not help, because the run-in is
+what varies.
+
+A record describing a measurement carries `conditions`: the parameters the
+number depends on, in the units the work uses — the scenario, the scale, the
+seed, how far in it was taken. It is optional, it does not change staleness, and
+nothing gates on it. Its whole job is that `recall` shows the phase beside the
+number, so the next reader sees what the last one assumed.
+
 ## Naming it early
 
 The Proof dial is set at routing time because the answer changes the work.

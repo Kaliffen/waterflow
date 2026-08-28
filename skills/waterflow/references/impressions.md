@@ -50,11 +50,12 @@ because it couples every test to the wire format.
 | `subject` | always | One kebab-case noun the record is about. |
 | `lane` | always | The lane in force. See [lanes.md](lanes.md). |
 | `tier` | always | The tier in force. See [model-tiers.md](model-tiers.md). |
-| `revision` | always | `git rev-parse --short HEAD` at emission. The freshness anchor. |
+| `revision` | always | `git rev-parse --short HEAD` at emission, or `unborn` when no commit exists yet. The freshness anchor. |
 | `scope` | always | Paths the claim depends on. `[]` when the claim is not about code. |
 | `supersedes` | always | Ids this record replaces. `[]` when it replaces nothing. |
 | `tags` | always | Retrieval axes. See the tag rule below. |
 | `state` | `prove` only | `pass` / `fail` / `blocked`. See [proof.md](proof.md). |
+| `conditions` | optional | The parameters a measurement depends on. See [proof.md](proof.md). |
 
 The body is a **gist line** — one sentence, the finding itself — then detail
 below it. Retrieval shows gists; detail is read only when a gist looks relevant.
@@ -87,6 +88,19 @@ the read half of the store and writes nothing, so a composite opening with
 4. **Set `scope` to what the claim depends on**, not to everything the operation
    read. A seam record scopes to the modules the seam sits between. A glossary
    decision scopes to `[]`.
+5. **Report one line as you emit.** The two happen in the same beat, so the
+   rule lives here rather than in each atom:
+
+   ```
+   ✅ **prove** — `npm test` passed at `9f3c1ab` · 1 impression
+   ```
+
+   The atom name, the outcome in the atom's own units, and what was emitted.
+   Units are the atom's: `prove` reports a command and a revision, `recall`
+   reports counts and staleness, `test` reports red-to-green transitions,
+   `slice` reports items published. A count is not a summary — "3 findings"
+   tells the owner whether to look, which is all a line is for. Markers and
+   block shape: [reporting.md](reporting.md).
 
 Do not emit when the operation settled nothing: a question asked and not
 answered, a search that found nothing, a step that only restated what a live
@@ -133,6 +147,13 @@ the anchor, and `git log` against an unreachable revision prints nothing — whi
 is indistinguishable from a fresh record. Three states, not two: **fresh**,
 **stale**, and **freshness unknown**. The third is reported, never rounded down
 to the first.
+
+An `unborn` anchor is the same third state, named rather than inferred. Emitting
+before a commit exists is legal — the moment worth emitting at is when the work
+settles, not when it lands — but the record cannot be checked against anything,
+so it never reads as fresh. Write `unborn`; do not leave the field blank and do
+not put a real revision there with a comment beside it, because both are
+indistinguishable at a glance from an anchor that simply has not drifted.
 
 **A stale record is surfaced as stale, never silently served.** Report it as
 "stale since `<revision>`" and let the reader decide whether to trust it or
