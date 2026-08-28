@@ -72,11 +72,30 @@ an entire exploration loop.
    revision, so run neither command against it — report it as freshness unknown
    and move on.
 
-5. **Report gists, newest first.** One line each: the gist, the atom, and the
-   date. Mark a stale record as **stale since `<revision>`**, and one whose
-   anchor is unreachable, `unborn`, or older than its own subject as **freshness
-   unknown**. Read a record's detail only when its gist looks relevant to the
-   work in hand.
+5. **Report by kind, not in one list.** What is known, what is believed, what
+   governs the area and what it is aiming at are four different answers to
+   "what do we know here", and flattening them is how a reading gets read as a
+   result — see the kinds in
+   [impressions.md](../waterflow/references/impressions.md).
+
+   | Group | Kinds | Ordered by |
+   |---|---|---|
+   | **Known** | `fact` | newest first |
+   | **Believed** | `observation` | newest first |
+   | **Governs** | `idiom` | oldest first — the ones that have survived longest |
+   | **Aiming at** | `goal` | unmeasured first |
+
+   One line each: the gist, the atom, and the date. Mark a stale record as
+   **stale since `<revision>`**, and one whose anchor is unreachable, `unborn`,
+   or older than its own subject as **freshness unknown**. Read a record's
+   detail only when its gist looks relevant to the work in hand.
+
+   **Say the shape before the contents** — "4 known, 2 believed, 3 idioms, 1
+   goal unmeasured" tells the reader where to look before they read anything.
+
+   **A goal with no `observation` naming it is reported unmeasured**, never as
+   met and never silently. A target nobody has measured is the most confident
+   thing a store can be wrong about.
 
    **A record carrying `conditions` shows them beside its gist**, never folded
    into the detail. A measurement whose conditions are one click away is read as
@@ -86,6 +105,22 @@ an entire exploration loop.
 6. **Say when there is nothing.** "No live records for `<subject>`" is a useful
    answer that stops the reader assuming coverage exists. Do not pad with
    near-misses from other subjects.
+
+## Asking what is unproven
+
+The believed group answers a question of its own: what would this subject have
+to prove to be sure of itself? Query it alone when that is the question — before
+a release, when inheriting an area, or when a decision is about to rest on
+something nobody checked.
+
+```sh
+grep -rlE '^kind: *observation *$' .waterflow/impressions/ | sort -r
+```
+
+Each one is a debt. It is promoted by running something that could have failed,
+after which it is emitted again as a `fact` superseding the observation. A
+subject whose believed group is longer than its known group is not documented,
+it is assumed.
 
 ## Briefing with recall
 
