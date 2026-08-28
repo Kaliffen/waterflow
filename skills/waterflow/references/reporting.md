@@ -54,10 +54,11 @@ Ending an `align`, `shape`, `build`, or `land` run:
 
 The rules, in order of what goes wrong without them:
 
-1. **One row per atom**, in the order it ran, including the ones that did not.
-   An atom that was skipped or blocked gets a row saying `⏸️` and which it was.
-   A missing row reads as an atom that ran silently, which is the worst of the
-   three.
+1. **One row per atom the run reached**, in the order it reached them,
+   including the ones that did not run. An atom that was skipped or blocked gets
+   a row saying `⏸️` and which it was. Of the three — ran, did not run, absent —
+   absent is the worst, because a missing row reads as an atom that ran
+   silently.
 2. **The worst outcome is stated in full below the table.** A table cell holds a
    count; a `❌` or `⚠️` needs a sentence the owner can act on without asking.
    Everything else stays a count.

@@ -55,11 +55,18 @@ an entire exploration loop.
    `git log` then prints nothing — which reads exactly like a fresh record. Run
    the ancestry check first and report such a record as **freshness unknown**,
    never as current. A `revision` of `unborn` is the same state, already named:
-   the record was emitted before any commit existed to anchor it.
+   the record was emitted before any commit existed to anchor it. It is not a
+   revision, so run neither command against it — report it as freshness unknown
+   and move on.
 
 5. **Report gists, newest first.** One line each: the gist, the atom, and the
    date. Mark stale records as **stale since `<revision>`**. Read a record's
    detail only when its gist looks relevant to the work in hand.
+
+   **A record carrying `conditions` shows them beside its gist**, never folded
+   into the detail. A measurement whose conditions are one click away is read as
+   a bare number, which is the failure the field exists to prevent — see
+   [proof.md](../waterflow/references/proof.md).
 
 6. **Say when there is nothing.** "No live records for `<subject>`" is a useful
    answer that stops the reader assuming coverage exists. Do not pad with

@@ -55,7 +55,7 @@ because it couples every test to the wire format.
 | `supersedes` | always | Ids this record replaces. `[]` when it replaces nothing. |
 | `tags` | always | Retrieval axes. See the tag rule below. |
 | `state` | `prove` only | `pass` / `fail` / `blocked`. See [proof.md](proof.md). |
-| `conditions` | optional | The parameters a measurement depends on. See [proof.md](proof.md). |
+| `conditions` | `prove` only, optional | The parameters a measurement depends on. See [proof.md](proof.md). |
 
 The body is a **gist line** — one sentence, the finding itself — then detail
 below it. Retrieval shows gists; detail is read only when a gist looks relevant.
