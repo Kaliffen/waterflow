@@ -18,10 +18,14 @@ Run these atoms in order.
    being landed whose anchor predates what it describes — including the ones
    emitted and closed earlier in the build, which are most of them. See
    [impressions.md](../waterflow/references/impressions.md).
+4. **Consolidate** any subject this leaves with no open items: its watermarks
+   move to `history` and what they established stays. See the fold in
+   [impressions.md](../waterflow/references/impressions.md).
 
 **Done when** every slice in the work is closed on the state surface, the proof
-state recorded against the integrated revision is `pass`, and nothing in the
-landed work is still anchored before the work it describes.
+state recorded against the integrated revision is `pass`, nothing in the landed
+work is still anchored before the work it describes, and any subject the work
+finished has been consolidated.
 
 Do not land on a `fail` or a `blocked`. Do not land on a `pass` that is stale or
 anchored `unborn` — re-run it. See

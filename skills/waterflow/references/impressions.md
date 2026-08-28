@@ -8,6 +8,13 @@ was confirmed, a term that was defined, a proof that ran. Records are a byproduc
 of doing the work, never a curation task. If a step ever asks a human to tidy the
 store, that step is wrong.
 
+Consolidating a finished subject is not tidying, and the difference is who does
+it and when. Tidying is a chore handed to a person because the store got
+untidy; consolidating is an atom emitting what it just established, at the one
+moment the flow already knows the work is over. Nothing is graded, nothing is
+rewritten by hand, and skipping it degrades retrieval rather than breaking
+anything.
+
 The point is that context becomes *queried* rather than *loaded*. Briefing a cold
 subagent is "the live records tagged `checkout`", not a pasted conversation.
 
@@ -121,6 +128,38 @@ Only a `fact` carries a verdict, so among the records the proof gate reads, only
 a `fact` can refuse a commit. A record written before this field existed carries
 no `kind` and is still gated; so is one whose `kind` is not a name on this list,
 because a typo must not be able to switch the gate off.
+
+## The fold
+
+A finished subject keeps its knowledge and loses its traces.
+
+When work is integrated and the subject has no open items left on the state
+surface, the run **consolidates** it. That trigger is the point: the state
+surface already knows when work is over, so nothing has to judge it. A subject
+still being worked on is never consolidated, and a build of nine slices
+consolidates once, at the end, rather than after each one.
+
+What happens is two things, and only the first is new:
+
+1. **Watermarks move to `history`.** The process is over, so the record of how
+   it ran leaves the retrieval path. It is not deleted and not superseded —
+   moved. See [where records live](#where-records-live).
+2. **Everything else stays, re-anchored.** Facts, observations, idioms and goals
+   are what the work established, and they are the subject's live state
+   afterwards. They are brought to the integrated revision by the rule in
+   [Staleness](#staleness), exactly as closed items are.
+
+**Facts do not rot on their own, because nothing changes unless a process runs.**
+A fact is invalidated by a later process touching the same code, and that process
+owns updating it when it consolidates its own watermarks. That is what makes the
+fold safe: the store is a projection of the processes that have run, and the last
+one to touch an area leaves it true.
+
+The convention is not enforced, and it can be broken — by an edit made outside
+the flow, or by two writers in one tree. When drift is observed anyway, the
+answer is to go and look: re-derive the facts against the code with `dig` or a
+direct inspection, and emit what is actually true. Not to block the commit, and
+not to trust the record because it is the record.
 
 ## The tag rule
 
