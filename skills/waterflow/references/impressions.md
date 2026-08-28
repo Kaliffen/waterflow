@@ -148,7 +148,7 @@ Consolidate a subject only if it has ever had items and none are open now. A
 subject that was never tracked is not finished, it is untracked, and an empty
 frontier cannot tell the two apart on its own.
 
-What happens is two things, and only the first is new:
+What happens is three things:
 
 1. **Watermarks move to `history`.** The process is over, so the record of how
    it ran leaves the retrieval path. It is not deleted and not superseded —
@@ -177,12 +177,40 @@ What happens is two things, and only the first is new:
    `git mv` rather than `mv`, so the move is a rename in the history rather than
    a delete and an add, and `git log --follow` still reaches the record.
 
-2. **Everything else stays where it is.** Facts, observations, idioms and goals
-   are what the work established, and they are the subject's live state
-   afterwards. Consolidation does not rewrite them, supersede them or re-anchor
-   them — a fact nothing re-ran is not made truer by being restated at a newer
-   revision. The records the landed work itself emitted are re-anchored, but by
-   the integration rule under **Staleness**, which is a separate step that runs
+2. **Superseded records follow them.** A record something else replaced is spent
+   in exactly the sense a watermark is: nothing should ever read it to learn
+   what is true. Until now it stayed in the retrieval directory, excluded by
+   every reader remembering to skip it — the convention that moving watermarks
+   out was meant to stop relying on. In a real store these outnumber watermarks,
+   and they are the clearer case, because a superseded record is not current by
+   definition rather than by classification.
+
+   ```sh
+   grep -rh '^supersedes:' "$store" | tr -d '[]' | sed 's/supersedes://' |
+     tr ',' '
+' | tr -d ' ' | grep .
+   ```
+
+   Each id in that output is a file that moves. The trail stays readable: the
+   record that superseded it names it, and `history` is where the reader is sent
+   for the question of how something changed.
+
+3. **Everything else stays, and has its `kind` settled.** Facts, observations,
+   idioms and goals are what the work established, and they are the subject's
+   live state afterwards. Consolidation does not rewrite a claim, supersede it,
+   or re-anchor it — a fact nothing re-ran is not made truer by being restated at
+   a newer revision. It does write the `kind` of any surviving record that
+   carries none, using the same atom mapping.
+
+   That is a classification, not a claim. The kind was already determined by the
+   atom that emitted the record; leaving it implicit means every future reader
+   re-derives it, and it is the reason a store can be years old and still
+   force the inference on someone. Settling it once, at the moment the subject
+   is finished and nothing more will be added, is the only point where it can be
+   done without guessing at work still in flight.
+
+   The records the landed work itself emitted are re-anchored, but by the
+   integration rule under **Staleness**, which is a separate step that runs
    whether or not anything is consolidated.
 
 **Facts do not rot on their own, because nothing changes unless a process runs.**
