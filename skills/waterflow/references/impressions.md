@@ -148,6 +148,13 @@ is indistinguishable from a fresh record. Three states, not two: **fresh**,
 **stale**, and **freshness unknown**. The third is reported, never rounded down
 to the first.
 
+An `unborn` anchor is the same third state, named rather than inferred. Emitting
+before a commit exists is legal — the moment worth emitting at is when the work
+settles, not when it lands — but the record cannot be checked against anything,
+so it never reads as fresh. Write `unborn`; do not leave the field blank and do
+not put a real revision there with a comment beside it, because both are
+indistinguishable at a glance from an anchor that simply has not drifted.
+
 **An anchor can be a real revision and still be wrong.** A record emitted while
 the work is uncommitted anchors to whatever `HEAD` was — the commit *before* the
 work, in which the files the record describes may not exist at all. Nothing is
@@ -157,27 +164,25 @@ and it is quieter, because `unborn` at least announces itself.
 
 Two defences, and they are the write side and the read side of one rule:
 
-- **Re-anchor at integration.** When work lands, the records proved by that run
-  are superseded by records carrying the integrated revision, exactly as the
-  items closed by that run carry it. Landing is the moment the store can first
-  be true, so it is the moment it is made true.
+- **Re-anchor at integration.** When work lands, every record and item in it
+  that is anchored before the work it describes is brought to the integrated
+  revision — records by superseding them, items by rewriting `revision` beside
+  the `proof` already recorded there. That is most of them, not a few: records
+  are emitted and items are closed during the build, when `HEAD` is still the
+  commit the work started from. Landing is the first moment the store can be
+  true, so it is the moment it is made true.
 - **Read the anchor against the scope.** A record whose whole `scope` was
   *created* after its anchor is not stale, it is unverifiable: there is no
   earlier state its claim could have been true of.
 
   ```sh
-  git log --oneline --diff-filter=A <revision>..HEAD -- <scope paths>
+  git log --diff-filter=A --name-only --format= <revision>..HEAD -- <scope paths>
   ```
 
-  Output covering the whole scope means the anchor predates the subject, and the
-  record is reported as freshness unknown rather than as stale.
-
-An `unborn` anchor is the same third state, named rather than inferred. Emitting
-before a commit exists is legal — the moment worth emitting at is when the work
-settles, not when it lands — but the record cannot be checked against anything,
-so it never reads as fresh. Write `unborn`; do not leave the field blank and do
-not put a real revision there with a comment beside it, because both are
-indistinguishable at a glance from an anchor that simply has not drifted.
+  This lists the paths in `scope` first added after the anchor. When it names
+  every path in `scope`, the anchor predates the subject and the record is
+  reported as freshness unknown. A record with `scope: []` is exempt, as it is
+  from staleness.
 
 **A stale record is surfaced as stale, never silently served.** Report it as
 "stale since `<revision>`" and let the reader decide whether to trust it or

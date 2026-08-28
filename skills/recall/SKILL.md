@@ -50,13 +50,18 @@ an entire exploration loop.
    Non-empty output means stale. A record with `scope: []` is never stale this
    way.
 
-   Then check the anchor is not *older than the subject*: a record whose whole
+   Then check the anchor is not *older than the subject*. A record whose whole
    `scope` was added after its revision describes code that did not exist when
-   it was written, which is unverifiable rather than stale.
+   it was written, so report it as **freshness unknown**, not as stale — there
+   is no earlier state its claim could have been true of:
 
    ```sh
-   git log --oneline --diff-filter=A REVISION..HEAD -- SCOPE
+   git log --diff-filter=A --name-only --format= REVISION..HEAD -- SCOPE
    ```
+
+   That lists the paths in `scope` first added after the anchor. When it names
+   every path in `scope`, the anchor predates the subject. A record with
+   `scope: []` is exempt, as it is from staleness.
 
    **An unreachable anchor is not freshness.** After a rebase, amend, or
    squash-merge the recorded revision no longer exists on this branch, and
@@ -68,8 +73,10 @@ an entire exploration loop.
    and move on.
 
 5. **Report gists, newest first.** One line each: the gist, the atom, and the
-   date. Mark stale records as **stale since `<revision>`**. Read a record's
-   detail only when its gist looks relevant to the work in hand.
+   date. Mark a stale record as **stale since `<revision>`**, and one whose
+   anchor is unreachable, `unborn`, or older than its own subject as **freshness
+   unknown**. Read a record's detail only when its gist looks relevant to the
+   work in hand.
 
    **A record carrying `conditions` shows them beside its gist**, never folded
    into the detail. A measurement whose conditions are one click away is read as

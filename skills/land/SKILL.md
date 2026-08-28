@@ -14,13 +14,14 @@ Run these atoms in order.
 2. **`prove`** — run the proof again, now. A pass recorded at an earlier revision
    is not evidence about this one.
 3. **Integrate**, then `close_item` for every slice included, with the proof
-   state and the revision, and **re-anchor** the records this run proved to that
-   same revision — see
+   state and the revision, and **re-anchor** every record and item in the work
+   being landed whose anchor predates what it describes — including the ones
+   emitted and closed earlier in the build, which are most of them. See
    [impressions.md](../waterflow/references/impressions.md).
 
-**Done when** every slice in the work is closed on the state surface and the
-proof state recorded against the integrated revision is `pass`, with no record
-this run proved left anchored before the work it describes.
+**Done when** every slice in the work is closed on the state surface, the proof
+state recorded against the integrated revision is `pass`, and nothing in the
+landed work is still anchored before the work it describes.
 
 Do not land on a `fail` or a `blocked`. Do not land on a `pass` that is stale or
 anchored `unborn` — re-run it. See
