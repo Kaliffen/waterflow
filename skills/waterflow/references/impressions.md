@@ -22,6 +22,19 @@ Records are plain files and retrieval is `grep`. No index, no database, no
 embeddings — the store has to survive being copied into any repository on any
 host.
 
+**Spent watermarks live beside the store, not in it**, in a `history` directory
+that is the impressions directory's sibling — `.waterflow/history` by default,
+and `docs/history` for a store relocated to `docs/store`. Nothing reads it.
+
+That is a sibling rather than a subdirectory on purpose. Retrieval is `grep -r`
+over the store, so a subdirectory would still be found, and the exclusion would
+be a convention readers had to remember rather than a fact about where the files
+are. A record that has been moved there cannot be returned by a query that
+forgot to filter, because the query never walks that path.
+
+Nothing is deleted. The files stay, they stay diffable, and `git blame` still
+answers who claimed what. Only their reachability changes.
+
 ## The record
 
 ```

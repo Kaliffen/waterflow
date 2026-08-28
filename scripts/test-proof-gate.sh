@@ -145,6 +145,18 @@ check "a fact gates" 1 "Commit refused"
 record_kind observaton fail "packages/" "$REV"
 check "a misspelt kind still gates" 1 "Commit refused"
 
+# A spent watermark lives beside the store, not in it, and the gate reads one
+# directory. This locks that: the same record that refuses a commit from the
+# store is invisible from history, so the exclusion survives anyone later
+# reaching for a recursive glob.
+record fail "packages/" "$REV"
+check "control: the record refuses from the store" 1 "Commit refused"
+mkdir -p .waterflow/history
+mv .waterflow/impressions/r.md .waterflow/history/r.md
+check "a record in history is invisible to the gate" 0 -
+mv .waterflow/history/r.md .waterflow/impressions/r.md
+rmdir .waterflow/history
+
 # No store at all is not an error.
 rm -rf .waterflow
 check "absent store exits clean" 0 -
