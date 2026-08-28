@@ -3,7 +3,9 @@ id:       impressions-7b2e
 title:    The emission contract carries reporting, conditions, and unborn
 subject:  impressions
 blockers: [reporting-1a4c]
-state:    open
+state:    closed
+proof:    pass
+revision: d5632f0
 ---
 An atom finishing an operation learns from one file both what to emit and what to
 report, because the two happen in the same beat. A record describing a

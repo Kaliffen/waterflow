@@ -3,7 +3,9 @@ id:       reporting-1a4c
 title:    The reporting reference agrees with itself and with what was settled
 subject:  reporting
 blockers: []
-state:    open
+state:    closed
+proof:    pass
+revision: d5632f0
 ---
 A reader following the block rules produces a block the rules accept. Every atom
 that the run touched appears as a row, including the ones that did not run, and

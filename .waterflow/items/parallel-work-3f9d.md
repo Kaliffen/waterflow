@@ -3,7 +3,9 @@ id:       parallel-work-3f9d
 title:    The one-writer rule binds any writer, and friction reads as a seam
 subject:  parallel-work
 blockers: []
-state:    open
+state:    closed
+proof:    pass
+revision: d5632f0
 ---
 Two peer sessions editing one checkout are as clearly forbidden as two agents,
 because the rule is stated about writers rather than about agents. Choosing a
