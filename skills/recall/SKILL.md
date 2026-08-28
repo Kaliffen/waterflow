@@ -50,6 +50,14 @@ an entire exploration loop.
    Non-empty output means stale. A record with `scope: []` is never stale this
    way.
 
+   Then check the anchor is not *older than the subject*: a record whose whole
+   `scope` was added after its revision describes code that did not exist when
+   it was written, which is unverifiable rather than stale.
+
+   ```sh
+   git log --oneline --diff-filter=A REVISION..HEAD -- SCOPE
+   ```
+
    **An unreachable anchor is not freshness.** After a rebase, amend, or
    squash-merge the recorded revision no longer exists on this branch, and
    `git log` then prints nothing — which reads exactly like a fresh record. Run

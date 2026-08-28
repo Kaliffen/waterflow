@@ -60,6 +60,11 @@ seed, how far in it was taken. It is optional, it does not change staleness, and
 nothing gates on it. Its whole job is that `recall` shows the phase beside the
 number, so the next reader sees what the last one assumed.
 
+A measurement also carries its **tail**, not only its headline. A mean inside
+budget with a worst case outside it is a pass that drops frames, and reporting
+the mean alone is how that gets missed. If the proof printed a distribution,
+the record quotes it.
+
 ## Naming it early
 
 The Proof dial is set at routing time because the answer changes the work.

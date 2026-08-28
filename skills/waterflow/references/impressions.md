@@ -148,6 +148,30 @@ is indistinguishable from a fresh record. Three states, not two: **fresh**,
 **stale**, and **freshness unknown**. The third is reported, never rounded down
 to the first.
 
+**An anchor can be a real revision and still be wrong.** A record emitted while
+the work is uncommitted anchors to whatever `HEAD` was — the commit *before* the
+work, in which the files the record describes may not exist at all. Nothing is
+malformed: the sha resolves, the ancestry check passes, and the record reads as
+one that has merely drifted. It is the `unborn` problem wearing a real revision,
+and it is quieter, because `unborn` at least announces itself.
+
+Two defences, and they are the write side and the read side of one rule:
+
+- **Re-anchor at integration.** When work lands, the records proved by that run
+  are superseded by records carrying the integrated revision, exactly as the
+  items closed by that run carry it. Landing is the moment the store can first
+  be true, so it is the moment it is made true.
+- **Read the anchor against the scope.** A record whose whole `scope` was
+  *created* after its anchor is not stale, it is unverifiable: there is no
+  earlier state its claim could have been true of.
+
+  ```sh
+  git log --oneline --diff-filter=A <revision>..HEAD -- <scope paths>
+  ```
+
+  Output covering the whole scope means the anchor predates the subject, and the
+  record is reported as freshness unknown rather than as stale.
+
 An `unborn` anchor is the same third state, named rather than inferred. Emitting
 before a commit exists is legal — the moment worth emitting at is when the work
 settles, not when it lands — but the record cannot be checked against anything,

@@ -74,6 +74,17 @@ Both briefs are bounded: one deliverable, one word budget, one join point — th
 step. Neither fixes anything it finds; the containment rules are in
 [topology.md](../waterflow/references/topology.md).
 
+## When dispatch is unavailable
+
+Some sessions cannot spawn agents. Running both axes inline is legal and better
+than running neither, but it is **not** a two-axis review: one context read both
+briefs, so whatever the first axis noticed is in the room for the second, which
+is the contamination the parallel shape exists to prevent.
+
+Say so, in the report and in the record, and mark axis independence `⚠️` rather
+than `✅`. A run that substitutes quietly is claiming a property it does not
+have.
+
 ## 5. Join and aggregate
 
 Present both under `## Standards` and `## Spec`, verbatim or lightly cleaned.
