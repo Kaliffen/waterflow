@@ -2,7 +2,7 @@
 id:       store-ontology-5a8d
 title:    The crowd simulator's store is consolidated for real
 subject:  store-ontology
-blockers: [store-ontology-4f7c]
+blockers: []
 state:    open
 ---
 The store of the app this design came from is put through the change end to end,

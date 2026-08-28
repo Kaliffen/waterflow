@@ -68,7 +68,7 @@ because it couples every test to the wire format.
 |---|---|---|
 | `id` | always | `YYYY-MM-DD-<4 hex>`. Matches the filename. Never reused. |
 | `kind` | always | What sort of knowledge this is. Absent on records written before the field existed; never omitted now. See the kinds below. |
-| `atom` | always | The atom that emitted. One of the shipped atom names. |
+| `atom` | always, except `goal` | The atom that emitted. One of the shipped atom names. A `goal` is set by a person, so it carries none. |
 | `subject` | always | One kebab-case noun the record is about. |
 | `lane` | always | The lane in force. See [lanes.md](lanes.md). |
 | `tier` | always | The tier in force. See [model-tiers.md](model-tiers.md). |
@@ -119,8 +119,15 @@ Which atom writes which kind, so no atom has to decide twice:
 | `define`, `interrogate` | `idiom` |
 | `slice` | `watermark` |
 
-`goal` is the one kind no atom emits as a byproduct. A target is stated
-deliberately, by whoever is entitled to set it.
+`goal` is the one kind no atom emits as a byproduct, because a target is not a
+byproduct of anything — it is set deliberately by whoever is entitled to set it,
+which is the owner. A goal record therefore carries no `atom`, and its `scope`
+is the code the target is about, so it goes stale when that code moves.
+
+Its gist names the target and the measurement that decides it, in one sentence,
+and its detail says what the target gates. "Fast enough" is not a goal; "50,000
+agents inside a 16.7 ms frame, decided by mean step time in the developed
+crush, and the GPU backend waits on it" is.
 
 Only a `fact` carries a verdict, so among the records the proof gate reads, only
 a `fact` can refuse a commit. A record written before this field existed carries
@@ -155,6 +162,20 @@ What happens is two things, and only the first is new:
    in the kinds above. When an atom is not in that table, leave the record
    alone: an unmoved record costs a line of retrieval, and a wrongly moved one
    is knowledge that has silently left the store.
+
+   ```sh
+   store=.waterflow/impressions                 # or the configured path
+   history=$(dirname "$store")/history          # always its sibling
+
+   # declared watermarks, and records predating the field whose atom is one
+   grep -rlE '^kind: *watermark *$' "$store"
+   grep -rLE '^kind: *' "$store" | xargs grep -lE '^atom: *slice *$'
+
+   mkdir -p "$history" && git mv <each file> "$history"/
+   ```
+
+   `git mv` rather than `mv`, so the move is a rename in the history rather than
+   a delete and an add, and `git log --follow` still reaches the record.
 
 2. **Everything else stays where it is.** Facts, observations, idioms and goals
    are what the work established, and they are the subject's live state

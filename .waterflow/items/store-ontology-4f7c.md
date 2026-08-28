@@ -3,12 +3,16 @@ id:       store-ontology-4f7c
 title:    Finishing a subject clears its traces and keeps its knowledge
 subject:  store-ontology
 blockers: [store-ontology-2d5a, store-ontology-3e6b]
-state:    closed
-proof:    pass
-revision: 531bcd2
+state:    open
 ---
 When integrating leaves no open work for a subject, the traces of how it was
 done are cleared away and what they established remains: what is true, what is
 still only believed, what governs the area, and what it is aiming at. A subject
 still being worked on is untouched, and a long build clears once at the end
 rather than after every slice.
+
+REOPENED before landing. The fold is specified, followable and reviewed, and
+Authoring Rule 4 was amended to permit it -- but nothing has ever cleared a
+trace. This item is written as behaviour and the behaviour has not happened, so
+closing it on a critique of prose overstated what was delivered. It closes when
+a fold actually runs, which is store-ontology-5a8d.

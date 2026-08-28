@@ -33,7 +33,10 @@ an entire exploration loop.
 
 3. **Exclude superseded.** Collect every id named in a `supersedes:` line and
    drop those records. Include them only when the question is how something
-   changed, not what is true.
+   changed, not what is true. The `history` directory beside the store holds the
+   watermarks of consolidated subjects, and is read for that question and no
+   other — never to answer what is true now, which is what moving them out of
+   the store was for.
 
    ```sh
    grep -rh '^supersedes:' .waterflow/impressions/
@@ -84,11 +87,17 @@ an entire exploration loop.
    | **Believed** | `observation` | newest first |
    | **Governs** | `idiom` | oldest first — the ones that have survived longest |
    | **Aiming at** | `goal` | unmeasured first |
+   | **Done** | `watermark` | newest first |
+
+   The **Done** group is usually empty and that is the healthy state: watermarks
+   leave the store when a subject is consolidated, so any still present belong
+   to work that has not finished. A long Done group is a subject that stopped
+   rather than ended.
 
    A record with no `kind` predates the field, which is most of what is in an
    existing store. Group it by the atom that emitted it, using the mapping in
    [impressions.md](../waterflow/references/impressions.md), and say the group
-   was inferred. Do not invent a fifth group for them: a reader wants to know
+   was inferred. Do not give them a group of their own: a reader wants to know
    what is known and what is believed, not which records are old.
 
    One line each: the gist, the atom, and the date. Mark a stale record as
@@ -118,14 +127,23 @@ to prove to be sure of itself? Query it alone when that is the question — befo
 a release, when inheriting an area, or when a decision is about to rest on
 something nobody checked.
 
-This is steps 2 and 3 with one more filter, not a shortcut past them. Take the
+This is steps 2 and 3 with more filters, not a shortcut past them. Take the
 subject's live records exactly as before — the tag query, then the supersede
-exclusion — and keep the ones whose `kind` is `observation`:
+exclusion — and keep the ones that are observations:
 
 ```sh
-grep -rlE 'tags: *\[([^]]*, *)?SUBJECT( *,|\])' .waterflow/impressions/ |
-  xargs grep -lE '^kind: *observation *$' | sort -r
+live=$(grep -rlE 'tags: *\[([^]]*, *)?SUBJECT( *,|\])' .waterflow/impressions/)
+
+echo "$live" | xargs grep -lE '^kind: *observation *$'
+echo "$live" | xargs grep -LE '^kind: *' |
+  xargs grep -lE '^atom: *(critique|dig|probe) *$'
 ```
+
+Two queries, because a store is usually mostly older than the field. The second
+finds the records predating `kind` and classifies them by the atom that emitted
+them, exactly as step 5 does. Filtering on `kind` alone returns almost nothing in
+a real store and reports a clean subject — the same silent success the fold
+warns about.
 
 Then drop the superseded ones, as step 3 does. Skipping that turns a paid debt
 back into an outstanding one: an observation that has been promoted is named in
