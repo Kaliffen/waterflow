@@ -3,7 +3,9 @@ id:       store-ontology-1c4f
 title:    A record says what kind of knowledge it is
 subject:  store-ontology
 blockers: []
-state:    open
+state:    closed
+proof:    pass
+revision: ca0bb07
 ---
 Every record declares whether it is a fact, an observation, an idiom, a goal or
 a watermark, and the contract says how to tell them apart without deliberating:
