@@ -14,3 +14,7 @@ node_modules/
 # OS/editor
 .DS_Store
 Thumbs.db
+/.idea/indexLayout.xml
+/.idea/projectSettingsUpdater.xml
+/.idea/vcs.xml
+/.idea/workspace.xml

@@ -81,8 +81,10 @@ repository you want to route work in — a new solution or an old one:
 
 ```sh
 dotnet new sln -n Checkout          # or whatever your stack makes
+dotnet new console -o src/Checkout
+dotnet sln add src/Checkout/Checkout.csproj
 git init
-claude --plugin-dir /path/to/waterflow
+claude --plugin-dir C:/Users/aboes/repos/waterflow
 ```
 
 The flag is per-session and reads the working tree directly — nothing is copied
