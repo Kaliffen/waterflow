@@ -42,3 +42,19 @@ work turns out to be different from what was routed: a `direct` task that reveal
 an unclear seam becomes `align`, and saying so out loud is the point. Silent
 drift into more process is the failure mode; announced re-routing is the flow
 working.
+
+## Firing unrouted
+
+An atom is model-invoked, so most of the time it fires without `/waterflow`
+having run and without a composite around it. The unrouted case is the common
+one, not an error, and an atom does not stop to ask for dials it can set itself.
+
+Take the defaults — Lane `direct`, Topology `inline`, Owner `agent`, Tier
+whatever the session is already on — and report only the dial the operation
+actually turns on. A `recall` does not need five settings announced at it.
+
+Two things still hold. An unrouted atom that hits an **escalate** condition above
+says so and hands the routing back rather than proceeding on the defaults. And
+the **Proof** dial is the one an atom may not invent for itself, because a proof
+chosen after the fact is chosen from what already passes — its default is in
+[proof.md](proof.md).

@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 // Waterflow repo validation. Zero dependencies. Run: node scripts/check.mjs
 //
-// Checks (D7, cheap only):
+// Checks. Cheap and deterministic only: nothing here asks a model anything.
 //   1. every skill directory has a SKILL.md
 //   2. frontmatter keys are in the known set, and name matches the directory
 //   3. relative markdown links resolve on disk
 //   4. .claude-plugin/plugin.json lists exactly the skills on disk
 //   5. no file carries a UTF-8 BOM or a stray control character
 //   6. model-invoked skill count stays within the description budget
-//   7. the Claude and Codex manifests agree on version
 
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { join, dirname, resolve, relative, sep } from "node:path";
@@ -31,9 +30,7 @@ const KNOWN_FRONTMATTER_KEYS = new Set([
 const SKIP_DIRS = new Set([".git", ".review", "node_modules", ".idea"]);
 
 const errors = [];
-const warnings = [];
 const fail = (m) => errors.push(m);
-const warn = (m) => warnings.push(m);
 const rel = (p) => relative(ROOT, p).split(sep).join("/");
 
 function walk(dir, out = []) {
@@ -132,7 +129,7 @@ if (!existsSync(SKILLS_DIR)) {
 if (modelInvoked > DESCRIPTION_BUDGET) {
   fail(
     `budget: ${modelInvoked} model-invoked skills exceeds the budget of ` +
-      `${DESCRIPTION_BUDGET}. A new one must displace an existing one (AGENTS.md).`,
+      `${DESCRIPTION_BUDGET}. A new one must displace an existing one.`,
   );
 }
 
@@ -176,7 +173,6 @@ if (!existsSync(MANIFEST)) {
 }
 
 // --- report ------------------------------------------------------------------
-for (const w of warnings) console.log(`warn  ${w}`);
 for (const e of errors) console.error(`FAIL  ${e}`);
 
 if (errors.length) {

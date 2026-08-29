@@ -103,8 +103,8 @@ behaviour in the fewest tokens by recruiting priors the model already holds.
 
 Coining your own works only if you define it clearly, and a made-up word recruits
 no priors: you pay in definition tokens what a pretrained word gives free. Reach
-for an existing word first. This is the reasoning behind Waterflow's plain-verb
-rule (D11), and behind refusing the water metaphor in the working vocabulary.
+for an existing word first. This is the reasoning behind the plain-verb rule
+below, and behind refusing the water metaphor in the working vocabulary.
 
 Hunt for passages that collapse into a single token: "fast, deterministic,
 low-overhead" becomes *tight*; "a loop you believe in" becomes *red*.

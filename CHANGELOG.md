@@ -2,8 +2,54 @@
 
 ## Unreleased
 
-Correctness pass over the proof gate and the retrieval commands, after the first
-end-to-end review.
+A review pass over the whole shipped surface, then a correctness pass over the
+proof gate and the retrieval commands after the first end-to-end review.
+
+### Review pass
+
+- An atom firing without `/waterflow` had no dials, and `prove` stopped dead
+  when the Proof dial was unset. That is the common path, not an error: the
+  atoms are model-invoked and the router is not. `dials.md` gained **Firing
+  unrouted** — take the defaults, report only the dial the operation turns on,
+  hand routing back on an escalate condition — and `proof.md` gained the one
+  default an atom may not invent for itself, the repository's own test command,
+  reported as inferred. `prove` falls back to it instead of refusing to run.
+- The README's retrieval example used a loose `tags:.*checkout`, the exact
+  pattern `impressions.md` and `recall` go out of their way to forbid because it
+  also matches `checkout-flow`. It is the anchored ERE now, with the reason
+  beside it.
+- The fold's superseded-id pipeline in `impressions.md` carried a literal
+  carriage return and a literal newline inside its `tr` arguments. Invisible in
+  review, and gone the moment anyone copies the block. It mirrors
+  `proof-gate.sh` exactly now, escapes written as escapes.
+- `check.mjs` claimed a seventh check — "the Claude and Codex manifests agree on
+  version" — that was never implemented, and carried a `warn` helper and a
+  report loop nothing called.
+- Removed the last pointers to an `AGENTS.md` that does not exist, from
+  `check.mjs` and the build plan, and the factory-side `(D11)` and `(D7)`
+  identifiers from `authoring` and `check.mjs`. `authoring` ships to consumers;
+  a decision id they cannot resolve is noise.
+- Corrected the README: nine references, not eight, and the git-repository
+  requirement stated once rather than twice.
+- `.gitattributes` pinned `*.sh`, `*.mjs`, and `*.md` to LF but not `*.json` or
+  `*.yml`, so with `core.autocrlf` on those drifted to CRLF in the worktree
+  while the repo stored LF. Named the rest of the text and normalized what had
+  already drifted.
+
+### Documentation
+
+- Deleted `docs/pre-plan-analysis.md` and the references to it. The decisions it
+  argued out are settled and tabled in `docs/build-plan.md`; the teardown of the
+  two reference repositories had done its job, and 53KB behind a single pointer
+  was going to rot rather than be read. `ATTRIBUTION.md` no longer cites it for
+  the borrow ledger or the review checkouts, both of which it already carries
+  itself.
+- Rewrote `docs/build-plan.md` for what is next rather than what is done. Gate 1
+  now names the three things nothing has exercised — the fold, re-anchoring at
+  integration, and firing unrouted — and Gate 2 gained a rule that a gate run
+  outside this repository lands its verdict inside it.
+
+### Correctness pass
 
 - `proof-gate.sh`: scope entries now match a staged path as a whole path or a
   directory prefix, not as a substring — scope `api/` no longer fires on

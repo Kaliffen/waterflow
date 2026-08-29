@@ -191,19 +191,23 @@ What happens is three things:
    definition rather than by classification.
 
    ```sh
-   grep -rh '^supersedes:' "$store" | tr -d '' | sed 's/^supersedes: *//' |
-     tr -d '[]' | tr ',' ' ' | tr ' ' '
-' | grep . |
+   grep -rh '^supersedes:' "$store"/*.md 2>/dev/null | tr -d '\r' \
+     | sed 's/^supersedes: *//' | tr -d '[]' | tr ',' '\n' | tr -d ' \t' |
+     grep -v '^$' |
      while read -r id; do
        [ -f "$store/$id.md" ] && git mv "$store/$id.md" "$history"/
      done
    ```
 
    Same pipeline the proof gate uses to find superseded ids, including the
-   `tr -d ''` — a record written on Windows carries a carriage return that
-   silently breaks the match otherwise. The trail stays readable: the record
-   that superseded it names it, and `history` is where a reader is sent for the
-   question of how something changed.
+   `tr -d '\r'` — a record written on Windows carries a carriage
+   return that silently breaks the match otherwise. Write the escape, never
+   a literal carriage return in the snippet: the byte is invisible here,
+   survives review, and does not survive being copied.
+
+   The trail stays readable: the record that superseded it names it, and
+   `history` is where a reader is sent for the question of how something
+   changed.
 
 3. **Everything else stays, and has its `kind` settled.** Facts, observations,
    idioms and goals are what the work established, and they are the subject's

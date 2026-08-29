@@ -72,3 +72,16 @@ Knowing that a change closes on a test at a named seam shapes how it is built;
 discovering afterwards that nothing can check it means the design already went
 wrong. If no proof can be named, that is the finding — say so and escalate rather
 than proceeding with the dial left blank.
+
+## When nothing was named
+
+Work that was never routed has no Proof dial set, and refusing to run is the
+wrong answer — it makes the atom useless in the case it fires in most often. The
+fallback is the repository's own test command, the convention named in the
+README, and it is reported as inferred rather than as the dial: "no proof named,
+ran `npm test`".
+
+That fallback is a candidate, not a licence. It holds only while the command can
+fail for the reason the work could be wrong. When the repository has no test
+command, or the change is somewhere the suite does not reach, the rule above
+stands: name the proof, or say that none can be named and escalate.

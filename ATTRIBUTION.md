@@ -14,8 +14,8 @@ where it does not:
 source: mattpocock/skills @ <commit> — skills/productivity/grilling/SKILL.md (copied)
 ```
 
-The tier is one of `copied`, `adapted`, or `cited`, matching the borrow ledger
-in `docs/pre-plan-analysis.md` §7.4. The commit is what makes upstream drift
+The tier is one of `copied`, `adapted`, or `cited`, and the ledger below is the
+record of which applies to what. The commit is what makes upstream drift
 diffable later: it is the point you compare against when checking whether the
 source has moved.
 
@@ -58,8 +58,8 @@ the trigger-token convention for reference loading.
 ## The review checkouts
 
 Working copies live under `.review/`, which is git-ignored: they stay on the
-machine and never travel with the repository. `docs/pre-plan-analysis.md` cites
-them by path, so restoring them is what makes those citations followable.
+machine and never travel with the repository. Restore them at the pinned commits
+below to compare a borrowed file against the source it came from.
 
 ```sh
 git clone https://github.com/mattpocock/skills .review/mattpocock-skills

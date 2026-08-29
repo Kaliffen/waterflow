@@ -14,8 +14,11 @@ result, emit the record.
 ## Steps
 
 1. **Find the named proof.** It was set as the Proof dial when the work was
-   routed. If nothing was named, stop and say so — an unprovable change is a
-   routing finding, not something to work around. See
+   routed. Work that was never routed has none, which is the common case for an
+   atom firing on its own: fall back to the repository's own test command and
+   report it as inferred. When even that cannot fail for the reason the work
+   could be wrong, stop and say so — an unprovable change is a routing finding,
+   not something to work around. See
    [proof.md](../waterflow/references/proof.md).
 
 2. **Check for a live record first.** `recall` the subject for existing `prove`

@@ -111,9 +111,6 @@ Override any of them by writing `.waterflow/config.md` yourself — a repository
 that already tracks work in Jira or GitHub Issues says so there. Most do not
 need the file, and the skills read the conventions when it is absent.
 
-Waterflow does need a git repository: `revision` is the freshness anchor on
-every record.
-
 ### 3. Route a piece of work
 
 ```
@@ -172,8 +169,9 @@ Impressions are plain files, committed beside the code, and retrieval is `grep`.
 Ask `recall` for a subject, or look yourself:
 
 ```sh
-# live records tagged checkout, newest first
-grep -rl 'tags:.*checkout' .waterflow/impressions/ | sort -r
+# Live records tagged checkout, newest first. Anchored on the list separators
+# because tags are kebab-case: a loose match also hits 'checkout-flow'.
+grep -rlE 'tags: *\[([^]]*, *)?checkout( *,|\])' .waterflow/impressions/ | sort -r
 
 # ids that have been superseded — exclude these
 grep -rh '^supersedes:' .waterflow/impressions/
@@ -237,15 +235,14 @@ Tiers are advisory: Waterflow tells you what a phase warrants and you choose.
 ## Status
 
 Early but complete in shape. Phases 0-2 of `docs/build-plan.md` are done: the
-ground rules, the authoring standard, validation, the router, the eight
+ground rules, the authoring standard, validation, the router, the nine
 references, ten atoms, four composites, the proof gate, and CI. Nothing has been
 carried through the flow on real work yet, which is the next thing that matters
 and the only thing that can tell us whether the impression schema is right — see
 Gate 1 and Gate 2 in the build plan.
 
-Design reasoning is in `docs/pre-plan-analysis.md`, which teardowns the two
-repositories Waterflow learns from and records the decisions behind every rule
-here. Borrowed material is credited in `ATTRIBUTION.md`.
+The decisions the rules rest on are tabled in `docs/build-plan.md`, along with
+what is still open. Borrowed material is credited in `ATTRIBUTION.md`.
 
 ## Development
 
