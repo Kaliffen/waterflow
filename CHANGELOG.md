@@ -1,9 +1,126 @@
 # Changelog
 
-## Unreleased
+## 0.3.0
 
-A review pass over the whole shipped surface, then a correctness pass over the
-proof gate and the retrieval commands after the first end-to-end review.
+Everything from driving the flow against real work. The store learns what kind
+of knowledge each record holds and how a finished subject is folded up; the flow
+learns to report itself and to collect the agents it dispatches; anchors stop
+claiming a freshness they do not have; and a review pass over the whole shipped
+surface repairs what the first end-to-end runs found.
+
+### The store ontology
+
+- Records gained a `kind`: `fact`, `observation`, `idiom`, `goal`,
+  `watermark`. The problem was contamination rather than volume — a trace and a
+  truth come back from `recall` looking identical, so the older one wins by
+  sounding certain. One question decides the only ambiguous pair, and it is a
+  rule the repository already owned: did something run that could have failed?
+  If nothing did, it is an observation. A number does not settle it — a timing
+  against a named budget is a verdict, a timing with nothing to fail against is
+  a reading.
+- Only a `fact` carries a verdict, so among the records the proof gate reads,
+  only a `fact` can refuse a commit. A record predating the field is still
+  gated, and so is one whose `kind` is not a name on the list: the gate used to
+  fail open on a typo, which was the quietest possible mistake and the most
+  dangerous.
+- One table in the contract maps atom to kind, so no atom decides twice.
+  `prove` is the only atom emitting two, splitting on whether it reported a
+  verdict or a bare measurement. `goal` is the kind nothing emits — a target is
+  set deliberately by the owner — so a `goal` record carries no `atom`, which
+  the field table now excepts. Until it did, the one kind a person adds by hand
+  was the one kind the contract forbade.
+- **A goal never closes.** It is met or unmet, it names the statistic that
+  decides it and under what conditions, and a goal with no observation against
+  it is reported *unmeasured* — never as met, and never silently.
+- **Spent watermarks live beside the store, not in it.** A watermark whose
+  process is over moves to a `history` directory that is the impressions
+  directory's sibling. A sibling rather than a subdirectory because retrieval is
+  `grep -r`: a subdirectory would still be walked, and the exclusion would be a
+  convention every reader had to remember instead of a fact about where the file
+  is. Nothing is deleted, so `git blame` still answers who claimed what; only
+  reachability changes.
+- **Superseded records follow them.** A record something else replaced is spent
+  in exactly the sense a watermark is. They outnumber watermarks in every store
+  looked at so far, and they are the clearer case — not current by definition
+  rather than by classification.
+- Added **the fold**. When integration leaves a subject with no open items,
+  `land` consolidates it: watermarks and superseded records move to `history`,
+  and the facts, observations, idioms and goals they established stay as the
+  subject's live state, with the `kind` of any survivor that carries none
+  settled by the same atom mapping. Claims, anchors and supersession are never
+  rewritten — a fact nothing re-ran is not made truer by being restated at a
+  newer revision. The trigger is the state surface rather than a judgement, so
+  an active subject is never touched and a nine-slice build consolidates once,
+  at the end; and a subject that never had items is untracked, not finished.
+- Watermarks are found by atom as well as by `kind`, because most records in any
+  existing store predate the field: a query for `kind: watermark` alone moves
+  nothing and reports success. An atom not in the mapping means leave the record
+  alone — an unmoved record costs a line of retrieval, a wrongly moved one is
+  knowledge that has silently left the store.
+- `recall` stops returning one flat list and reports four groups: known,
+  believed, governs, aiming at. Flattening them is how a reading gets read as a
+  result. Idioms come oldest first, because the ones that have survived longest
+  are the ones most likely to still be true; goals come unmeasured first. The
+  believed group can be queried alone, which answers a question the store could
+  not answer before — what would this subject have to prove to be sure of
+  itself? Records predating `kind` are grouped by their emitting atom, and the
+  inference is declared.
+
+### Reporting, and the agent lifecycle
+
+- Added `references/reporting.md`. Nothing reported what ran: one line per atom,
+  a block per composite, five markers and no sixth, no ANSI. The emission
+  contract owns the atom's line, because an atom reports and emits in the same
+  beat.
+- **Every dispatched agent is joined**, at or before the boundary that spawned
+  it. `topology.md` described how to choose a shape and said nothing about the
+  return leg. Dispatch now names a deliverable, a budget and a join point; a
+  timeout is either waited on or stopped, and which one is said out loud. A
+  dispatched agent does not dispatch, and a finding is not a mandate. Agents
+  dispatched and joined are counted in every composite block, including the runs
+  that dispatched none — reporting it only when it is interesting makes a
+  forgotten agent and a quiet run look identical.
+- Nothing said how parallel work reconciles. Fan-out branches stay separate, an
+  overlap is corroboration reported once, and a contradiction between branches
+  is escalated rather than averaged. At most one **writer** touches the working
+  tree — a writer, not an agent, because the collision that prompted the rule
+  was two peer sessions each reading an agent-shaped rule as satisfied.
+- Four rules that had two homes each now have one, with the skill keeping its
+  own action and pointing at the reference for the rule. The test that settles
+  it, and the boundary `authoring` was missing: does removing the text lose an
+  instruction, or a restatement?
+
+### Anchors and conditions
+
+- `unborn` is a named value of `revision` for a record emitted before any commit
+  exists, and it reads as *freshness unknown* rather than fresh. Three states,
+  not two.
+- **An anchor can be a real revision and still be wrong.** A record emitted
+  while the work is uncommitted anchors to the commit *before* the work, in
+  which its subject may not exist at all — the `unborn` problem wearing a real
+  sha, and quieter, because `unborn` at least announces itself. Two defences:
+  `land` re-anchors every record and item in the work it integrates, and
+  `recall` reports a record whose whole `scope` was created after its anchor as
+  freshness unknown rather than stale.
+- A measurement may carry `conditions`, the parameters it depends on, and
+  `recall` shows them beside the gist rather than in the detail. The write side
+  had landed and the read side had not, so a measurement was still read as a
+  bare number. `prove` asks for them at the point the number is taken rather
+  than at the emit step, which is where the discipline had been failing.
+
+### Interrogation
+
+- Rounds go through the client's structured prompt instead of a prose template:
+  four questions per call, one decision each, real options carrying cost and
+  benefit, the recommendation first. The client already offers the escape hatch
+  and the navigation, so the template was paying tokens to imitate them badly.
+- Added the **doubt sweep**. An empty frontier only means the obvious questions
+  are spent, so closing a round now requires a pass over six named sources —
+  assumption, contradiction, ambiguity, unoffered candidate, boundary,
+  reversibility — and a readback the owner confirms.
+- The one-decision-at-a-time rule is scoped to prose, which is where it was
+  true. It was never a property of decision-making; it is what prose does to a
+  list, and a structured prompt walks a batch one by one.
 
 ### Review pass
 

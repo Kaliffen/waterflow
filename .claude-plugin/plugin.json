@@ -1,6 +1,6 @@
 {
   "name": "waterflow",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Atomic, composable agent skills that carry work from idea to integration in a small feedback loop, routing process, model tier, agent topology, and proof by risk.",
   "author": {
     "name": "Adam Boes",
