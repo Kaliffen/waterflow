@@ -42,9 +42,10 @@ State it as:
 4. **What is blocked** until it is settled — or explicitly, that nothing is, and
    the work continues meanwhile.
 
-In prose, ask one at a time: a list of five open questions gets one
-answer. A structured prompt is the exception — it walks the owner through them
-one by one, so a batch of four carries.
+Hand over everything that is ready, through a structured prompt. The client
+walks the owner question by question, so a batch arrives as a batch and comes
+back answered in full. Prose is the fallback, and it carries one question:
+past the first, a list gets a single answer.
 
 ## Recording it
 
