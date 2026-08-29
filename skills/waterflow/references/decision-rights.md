@@ -42,7 +42,9 @@ State it as:
 4. **What is blocked** until it is settled — or explicitly, that nothing is, and
    the work continues meanwhile.
 
-Ask one at a time. A list of five open questions gets one answer.
+In prose, ask one at a time: a list of five open questions gets one
+answer. A structured prompt is the exception — it walks the owner through them
+one by one, so a batch of four carries.
 
 ## Recording it
 
