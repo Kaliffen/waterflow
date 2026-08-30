@@ -73,7 +73,7 @@ because it couples every test to the wire format.
 | `lane` | always | The lane in force. See [lanes.md](lanes.md). |
 | `tier` | always | The tier in force. See [model-tiers.md](model-tiers.md). |
 | `revision` | always | `git rev-parse --short HEAD` at emission, or `unborn` when no commit exists yet. The freshness anchor. |
-| `scope` | always | Paths the claim depends on. `[]` when the claim is not about code. |
+| `scope` | always | Paths the claim depends on, and for a grafted record the declaration it was grafted at, as `path#Symbol`. `[]` when the claim is not about code. See the grafting section below. |
 | `supersedes` | always | Ids this record replaces. `[]` when it replaces nothing. |
 | `tags` | always | Retrieval axes. See the tag rule below. |
 | `state` | `prove` only | `pass` / `fail` / `blocked`. See [proof.md](proof.md). |
@@ -138,6 +138,72 @@ Only a `fact` carries a verdict, so among the records the proof gate reads, only
 a `fact` can refuse a commit. A record written before this field existed carries
 no `kind` and is still gated; so is one whose `kind` is not a name on this list,
 because a typo must not be able to switch the gate off.
+
+## Grafting
+
+A claim about one declaration belongs at that declaration. Written there, in
+whatever doc idiom the codebase already uses, it cannot go stale the way a
+record can: it moves when the code moves, it is deleted when the code is
+deleted, and whoever invalidates it is standing in the file looking at it. The
+record then keeps the address and not a second copy. That is a **graft**.
+
+This is a rule rather than an idea because it already happens. A record settling
+what a type means and the doc comment on that type are one document written
+twice, by the same agent in the same pass, because settling a thing and
+documenting it are the same act. What the rule changes is only that the store
+stops keeping the second copy, which is the one that goes stale.
+
+**The comment carries the claim and never the process.** No record id, no
+revision, no atom or lane name, no date, no "this used to be" and no "changed in
+the third slice". A comment states what is true of the code now, timelessly, and
+reads as something a person would have written. The reference runs one way,
+store to code, which is what `scope` has always done. A comment naming a record
+would rot, because records are superseded and folded and the comment would not
+know.
+
+**Nothing is invented in the code.** The graft uses the host codebase's own doc
+idiom, with no marker and no tag. The symbol name lives in the record, so a
+store copied into any repository leaves that repository's source untouched.
+
+**Graft during the build, never at the fold.** The comment is written as part of
+the work, proven with it and committed with it. A fold that wrote into source
+would be editing the tree after the proof that closed it had already run, and
+where doc comments are compiled it could turn a proven build red after the run
+reported the subject landed. The fold only notices that a graft happened; it
+never writes code.
+
+So the record is emitted in full, at the moment the work settles, exactly as
+every other record is — it is what the code gets written from. It is reduced to
+its address later, by the fold.
+
+**What never grafts, and keeps its full expression:**
+
+- a record with `scope: []`, which has no declaration to sit at;
+- a decision not to build something, which has no code to sit in;
+- a claim about the shape *between* modules, such as a seam or a layering rule,
+  which belongs wherever the repository keeps such decisions and not at any one
+  declaration;
+- a `watermark`, which is spent rather than durable, and a `goal`, which is a
+  target rather than a description.
+
+Most records do not graft, and that is the healthy shape. A store loses the
+records that were going to duplicate a declaration, not its contents.
+
+**A grafted record is not stale; it is fine or it is broken.** Its content is
+read live from the code, so nothing in it can drift. Only the address can be
+wrong. When the path or the symbol no longer resolves, the record is **broken**
+— reported as broken rather than as stale, and answered by going and looking
+rather than by trusting either side.
+
+**Strip the symbol before any git command touches the path.** A `scope` entry
+carrying `#` is matched against staged paths by the proof gate and passed to
+`git log` by the freshness check, and neither matches `Claim.cs#Claim` against
+`Claim.cs`. A grafted record would then stop being gated and read as fresh, with
+no error anywhere — the same silent success the fold warns about:
+
+```sh
+printf '%s\n' "$scope" | sed 's/#.*$//'
+```
 
 ## The fold
 
@@ -209,7 +275,30 @@ What happens is three things:
    `history` is where a reader is sent for the question of how something
    changed.
 
-3. **Everything else stays, and has its `kind` settled.** Facts, observations,
+3. **Grafted records are emptied.** A record whose claim was written into the
+   code during the build keeps its frontmatter and its address, and its body
+   becomes the one line naming where the claim now lives:
+
+   ```
+   Grafted at src/Ab.CrowCity.Domain/Claim.cs#Claim.
+   ```
+
+   Find them by the `#` in `scope`, and confirm the graft is really there
+   before emptying anything — a declaration that does not carry the claim was
+   never grafted, and emptying the record would delete the only copy.
+
+   ```sh
+   grep -rlE '^scope:.*#' "$store"
+   ```
+
+   **Edited in place: not superseded, and not moved.** Superseding says a claim
+   was replaced and moving says it was spent, and this claim was neither — it
+   was transplanted, and it is still the current answer. Nothing is lost by
+   editing: git holds the pre-graft body at the commit that wrote it, and the
+   same commit shows the reasoning arriving in the code, so `git log -p` on the
+   record reads as the transplant it was rather than as an ending.
+
+4. **Everything else stays, and has its `kind` settled.** Facts, observations,
    idioms and goals are what the work established, and they are the subject's
    live state afterwards. Consolidation does not rewrite a claim, supersede it,
    or re-anchor it — a fact nothing re-ran is not made truer by being restated at
@@ -311,6 +400,12 @@ grep -rh '^supersedes:' .waterflow/impressions/
 Anything whose id appears in that output is excluded by default. Include
 superseded records only when the question is *how* something changed.
 
+**Follow a graft.** A record whose `scope` carries a `#` holds its claim at that
+declaration rather than in its body. Read the declaration and report what it
+says. Retrieval for such a record is one grep and one targeted read rather than
+grep alone — more than a gist costs, far less than a transcript, and it buys a
+claim read live instead of one anchored to a revision.
+
 ## Staleness
 
 A record's claim was true at its `revision`. It is **stale** when a file under
@@ -366,6 +461,12 @@ Two defences, and they are the write side and the read side of one rule:
   every path in `scope`, the anchor predates the subject and the record is
   reported as freshness unknown. A record with `scope: []` is exempt, as it is
   from staleness.
+
+**A grafted record is exempt from all of this.** Its claim is read from the code
+at the moment it is queried, so there is no anchor for it to drift from and no
+earlier state for it to have been true of. What is checked instead is that its
+address resolves, and three states become two: the declaration is there, or the
+record is broken.
 
 **A stale record is surfaced as stale, never silently served.** Report it as
 "stale since `<revision>`" and let the reader decide whether to trust it or

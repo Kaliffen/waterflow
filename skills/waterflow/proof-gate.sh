@@ -78,7 +78,10 @@ for f in "$DIR"/*.md; do
   state=$(field state "$f")
   subject=$(field subject "$f")
   revision=$(field revision "$f")
-  scope=$(field scope "$f" | tr -d '[]' | tr ',' ' ')
+  # A grafted entry names a declaration after its path — `Claim.cs#Claim`. The
+  # path is what gates; leaving the symbol on matches nothing and turns the gate
+  # off for that record without an error anywhere.
+  scope=$(field scope "$f" | tr -d '[]' | tr ',' ' ' | sed 's/#[^ ]*//g')
   [ -n "$scope" ] || continue
 
   # A scope entry matches a staged path only as a whole path or a directory

@@ -53,6 +53,19 @@ an entire exploration loop.
    Non-empty output means stale. A record with `scope: []` is never stale this
    way.
 
+   **Strip a grafted symbol before either command sees the path.** A `scope`
+   entry may name a declaration — `src/checkout/Cart.ts#Cart` — and `git log`
+   matches nothing against that, which reads exactly like a fresh record:
+
+   ```sh
+   printf '%s\n' "$scope" | sed 's/#.*$//'
+   ```
+
+   A grafted record is then exempt from the rest of this step. Its claim is read
+   live from the code, so it cannot drift; what is checked is that the address
+   resolves. When the path or the symbol is gone the record is **broken**, not
+   stale — see [impressions.md](../waterflow/references/impressions.md).
+
    Then check the anchor is not *older than the subject*. A record whose whole
    `scope` was added after its revision describes code that did not exist when
    it was written, so report it as **freshness unknown**, not as stale — there
@@ -101,9 +114,17 @@ an entire exploration loop.
    what is known and what is believed, not which records are old.
 
    One line each: the gist, the atom, and the date. Mark a stale record as
-   **stale since `<revision>`**, and one whose anchor is unreachable, `unborn`,
-   or older than its own subject as **freshness unknown**. Read a record's
-   detail only when its gist looks relevant to the work in hand.
+   **stale since `<revision>`**, one whose anchor is unreachable, `unborn`,
+   or older than its own subject as **freshness unknown**, and one whose graft
+   no longer resolves as **broken**. Read a record's detail only when its gist
+   looks relevant to the work in hand.
+
+   **A grafted record has no gist of its own — read it from the code.** Its body
+   is an address, so open the declaration its `scope` names and report what the
+   documentation there says, marked **grafted**. It carries no freshness verdict,
+   because there is nothing for a claim read live to have drifted from. This is
+   the one place retrieval is not grep alone: one targeted read per graft, which
+   is still a query rather than a transcript.
 
    **Say the shape before the contents** — "4 known, 2 believed, 3 idioms, 1
    goal unmeasured" tells the reader where to look before they read anything.

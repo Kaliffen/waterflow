@@ -82,6 +82,11 @@ check "scope 'api/' does not match packages/api/b.ts" 0 -
 record pass "packages/api/" "$REV"
 check "scope 'packages/api/' does match it" 0 "under its scope"
 
+# A grafted scope names a declaration after the path. The path still gates: an
+# unstripped `#` matches nothing and switches the gate off without an error.
+record pass "packages/api/b.ts#Thing" "$REV"
+check "grafted scope 'b.ts#Thing' still matches its file" 0 "under its scope"
+
 # A pass recorded at HEAD is not 'an older revision'.
 record pass "packages/" "$REV"
 check "pass at HEAD does not claim an older revision" 0 "passed at $REV"

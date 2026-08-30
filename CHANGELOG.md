@@ -1,5 +1,64 @@
 # Changelog
 
+## 0.4.0
+
+One change, found by reading a store beside the code it was written about. The
+record settling what a type meant and the doc comment on that type were the same
+document, written twice in the same pass, and only one of the two could go
+stale. The store now keeps the address instead of the second copy.
+
+### Grafting
+
+- **A claim about one declaration now lives at that declaration, and the record
+  keeps only its address.** The store was holding second copies of things the
+  code already said. Driving the flow against real work produced a record
+  settling what a type means and a doc comment on that type that were one
+  document written twice, by the same agent in the same pass — because settling
+  a thing and documenting it are the same act. Both copies stood, and the one
+  anchored to a revision was the one that would go stale while the code said the
+  truth beside it.
+- The address is carried in `scope` as `path#Symbol`. No new field: `scope`
+  already points store to code and is what every freshness check runs on, so a
+  graft is that field narrowed to the exact site. The direction that would rot —
+  a comment naming a record — stays impossible, because records are superseded
+  and folded and a comment would not know.
+- **Nothing is invented in the code.** The graft uses the host codebase's own
+  doc idiom, with no marker and no tag, and the symbol name lives in the record,
+  so a store copied into any repository leaves that repository's source
+  untouched. The comment carries the claim and never the process: no id, no
+  revision, no atom or lane, no date, no "this used to be".
+- **Grafted during the build, never by the fold.** A fold that wrote into source
+  would edit the tree after the proof that closed it had run, and where doc
+  comments are compiled it could turn a proven build red after the run reported
+  the subject landed. So the comment is written with the slice and proven with
+  it; the fold only notices and empties the record.
+- The fold gained a step for it, and empties the record **in place — not
+  superseded and not moved.** Superseding says a claim was replaced, moving says
+  it was spent, and this claim was neither: it was transplanted and is still the
+  current answer. Git holds the pre-graft body at the commit that wrote it and
+  the same commit shows the reasoning arriving in the code, so the trail reads as
+  the transplant it was rather than as an ending.
+- **Freshness collapses rather than growing.** A grafted record's claim is read
+  live from the code, so it cannot drift and carries no freshness verdict; only
+  its address can be wrong. Three states become two — the declaration resolves,
+  or the record is **broken**, which `recall` now reports beside stale and
+  freshness unknown, and which is answered by going and looking rather than by
+  trusting either side.
+- `recall` follows a graft: it reads the claim from the declaration instead of
+  from the record's body. This is the one place retrieval is not `grep` alone —
+  one targeted read per graft, which is still a query rather than a transcript.
+- **The proof gate was failing open on grafted scope, silently.** A `scope`
+  entry of `packages/api/b.ts#Thing` matched no staged path, so the gate printed
+  nothing and exited clean: the subject ungated, with no error anywhere. The
+  gate and `recall` now strip the symbol before any path is matched or handed to
+  `git log`, and the case is pinned in `test-proof-gate.sh` beside the `api/`
+  prefix cases that were also real defects once.
+- Most records do not graft, and that is the healthy shape. A record with
+  `scope: []`, a decision not to build something, a claim about the shape
+  *between* modules, a `watermark` and a `goal` all keep their full expression.
+  A store loses the records that were going to duplicate a declaration, not its
+  contents.
+
 ## 0.3.0
 
 Everything from driving the flow against real work. The store learns what kind
