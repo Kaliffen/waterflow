@@ -173,8 +173,26 @@ reported the subject landed. The fold only notices that a graft happened; it
 never writes code.
 
 So the record is emitted in full, at the moment the work settles, exactly as
-every other record is — it is what the code gets written from. It is reduced to
-its address later, by the fold.
+every other record is — it is what the code gets written from.
+
+**The build writes the address; the fold empties the body.** Two actors, and the
+split is forced rather than chosen: at emission the declaration usually does not
+exist yet, so there is nothing to address, and the address can only be written at
+the moment the comment is. A build that grafts a claim therefore adds
+`#Symbol` to the `scope` entry of the record it grafted from, and does nothing
+else to it. The body goes when the subject folds.
+
+**That is also how an existing store migrates, which is to say it does not.** A
+record written before this section carries no `#`, so nothing detects it as
+grafted, the fold's step finds nothing, and the strips below are no-ops on a path
+without one. Such a record keeps its full expression and goes stale in the
+ordinary way when the code moves, which is the correct outcome rather than a
+debt. There is no migration pass, and there must not be one: sweeping a store for
+old duplicates is exactly the tidying chore this contract says any step asking
+for is wrong. What converts a store is the rule above — the next build that
+grafts into a declaration stamps the address onto whatever record it grafted
+from, old or new, and the fold empties it at the end of that work. A pre-grafting
+store converts as fast as its subjects are touched, and no faster.
 
 **What never grafts, and keeps its full expression:**
 
@@ -199,7 +217,9 @@ rather than by trusting either side.
 carrying `#` is matched against staged paths by the proof gate and passed to
 `git log` by the freshness check, and neither matches `Claim.cs#Claim` against
 `Claim.cs`. A grafted record would then stop being gated and read as fresh, with
-no error anywhere — the same silent success the fold warns about:
+no error anywhere — the same silent success the fold warns about. The cost is
+that a path containing a literal `#` is truncated and cannot be scoped, which is
+rare enough to name here rather than defend against:
 
 ```sh
 printf '%s\n' "$scope" | sed 's/#.*$//'
@@ -275,9 +295,9 @@ What happens is three things:
    `history` is where a reader is sent for the question of how something
    changed.
 
-3. **Grafted records are emptied.** A record whose claim was written into the
-   code during the build keeps its frontmatter and its address, and its body
-   becomes the one line naming where the claim now lives:
+3. **Grafted records are emptied.** A record the build gave an address to keeps
+   its frontmatter and that address, and its body becomes the one line naming
+   where the claim now lives:
 
    ```
    Grafted at src/Ab.CrowCity.Domain/Claim.cs#Claim.
